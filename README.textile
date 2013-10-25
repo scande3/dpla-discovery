@@ -1,4 +1,7 @@
 API key: 8f0de09d287758110146743c69e8ddda
 
+Based on: https://developers.google.com/freebase/v1/search-widget
+(Example: http://suggest-examples.freebaseapps.com/example1)
+
 Source code for base app from Freebase
-http://freebase-suggest.googlecode.com/svn/trunk
+https://code.google.com/p/freebase-site/source/browse/#svn%2Ftrunk%2Fwww%2Flib%2Fsuggest
