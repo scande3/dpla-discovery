@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>	
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+	<link type="text/css" rel="stylesheet" href="../dist/css/freebase-controls.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+	<script type="text/javascript" src="../dist/freebase.suggest.js"></script> 
+	
+	<script type="text/javascript">
+		jQuery(function($) {
+			$("#soft_input")
+				.freebaseSuggest({soft:true})
+				.bind("fb-select", function(e, data) {
+					mylog("select id: " , data.id , ", name: " , data.name, data);
+				})
+				.bind("fb-submit", function(e, data) {
+					mylog("submit id: " , data.id ,  ", name: " , data.name, data);
+				});		
+
+			$("#hard_input")
+				.freebaseSuggest({soft:false, suggest_new:"Suggest new topic"})
+				.bind("fb-select", function(e, data) {
+					mylog("select id: " , data.id , ", name: " , data.name, data);
+				})
+				.bind("fb-submit", function(e, data) {
+					mylog("submit id: " , data.id ,  ", name: " , data.name, data);
+				})
+				.bind("fb-select-new", function(e, data) {
+					mylog("select new name: "  , data.name, data);
+				});									
+		});
+		
+		function mylog() {
+			var msg = "";
+			$.each(arguments, function(i,n) {
+				msg += n;
+			});
+			if (msg) {
+				$("#msg").append("<li>" + msg + "</li>");
+			}
+		};
+
+	</script>
+	
+</head>
+
+<body>
+
+	<center>
+		<label for="soft_input">Soft suggest</label>
+		<input id="soft_input" type="text"/>
+		
+		<br/>
+		<br/>		
+		
+		<label for="hard_input">Hard suggest with suggest new option</label>	
+		<input id="hard_input" type="text"/>
+		
+		<hr/>
+		
+		<ul id="msg"></ul>
+	</center>
+
+</body>
+</html>
+
+

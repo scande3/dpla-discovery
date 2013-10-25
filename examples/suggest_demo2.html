@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- Copyright 2007 Metaweb Technologies, Inc.  All Rights Reserved. -->
+     
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      xmlns:freebase="http://freebase.com/">
+<head>	
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+  <link type="text/css" rel="stylesheet" href="../dist/css/freebase-controls.css" />
+  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+  <script type="text/javascript" src="../dist/freebase.suggest.js"></script> 
+  
+  <title>Freebase Suggest Examples</title>
+
+  <style type="text/css"> 
+  .fbs-li-types { display:none; }   /* if you want to hide the type info in the suggest popup */
+ </style>
+</head>
+	 
+<body>
+
+<h1>Freebase Suggest examples</h1>
+(The menus have been simplified by hiding the type info with a STYLE tag)
+	     
+<h3>Freebase Suggest - default settings</h3>
+<input type="text" id="example1" />
+
+<h3>Music albums</h3>
+Favourite alum: <input type="text" id="example2"/>
+
+<h3>Films</h3>
+Last film I saw: <input type="text" id="example3" /> 
+
+<h3>Film critic who is also an actor - multiple type constraint</h3>
+Film critic + actor: <input type="text" id="actor_cr" /> 
+
+<h3>People - with callback</h3>
+Enter a person: <input type="text" id="example4" />
+
+<div id="log" style="margin:1em;"></div>
+
+<script type="text/javascript">
+jQuery( function($) {
+
+    $('#example1').freebaseSuggest();
+    $('#example2').freebaseSuggest( {ac_param:{type:'/music/album'}} );
+    $('#example3').freebaseSuggest( {ac_param:{type:'/film/film'}} );
+    $('#actor_cr').freebaseSuggest( {ac_param:{type:'/film/actor', type:'/film/film_critic'}} );
+    
+    $('#example4')
+    .freebaseSuggest( {ac_param:{type:'/people/person'}} )
+    .bind("fb-select", function(e, data) { $('#log').text("suggest: "+ data.id+" -- "+ data.name);  });
+
+});
+
+</script>
+
+</body>
+</html>
+
+

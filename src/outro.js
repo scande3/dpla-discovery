@@ -1,0 +1,3 @@
+
+
+})(jQuery, window.freebase.controls);

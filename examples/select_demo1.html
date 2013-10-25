@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>	
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+	<link type="text/css" rel="stylesheet" href="../dist/css/freebase-controls.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+	<script type="text/javascript" src="../dist/freebase.select.js"></script> 	
+	<script type="text/javascript">
+		jQuery(function($) {
+			$("#gender_input")
+				.freebaseSelect({type:"/people/gender"})
+				.bind("fb-select", function(e, data) {
+					mylog("select id: " , data.id , ", name: " , data.name, data);
+				})
+				.bind("fb-submit", function(e, data) {
+					mylog("submit id: " , data.id ,  ", name: " , data.name, data);
+				});		
+
+			$("#us_states_input")
+				.freebaseSelect({type:"/location/us_state"})
+				.bind("fb-select", function(e, data) {
+					mylog("select id: " , data.id , ", name: " , data.name, data);
+				})
+				.bind("fb-submit", function(e, data) {
+					mylog("submit id: " , data.id ,  ", name: " , data.name, data);
+				});								
+		});
+		
+		function mylog() {
+			var msg = "";
+			$.each(arguments, function(i,n) {
+				msg += n;
+			});
+			if (msg) {
+				$("#msg").append("<li>" + msg + "</li>");
+			}
+		};
+
+	</script>
+	
+</head>
+
+<body>
+
+	<center>
+		<label for="gender_input">Enter Gender</label>
+		<input id="gender_input" type="text"/>
+		
+		<br/>
+		<br/>		
+		
+		<label for="us_states_input">Enter US States</label>	
+		<input id="us_states_input" type="text"/>
+		
+		<hr/>
+		
+		<ul id="msg"></ul>
+	</center>
+	
+</body>
+
+</html>
+
+

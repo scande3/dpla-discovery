@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- Copyright 2007 Metaweb Technologies, Inc.  All Rights Reserved. -->
+     
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      xmlns:freebase="http://freebase.com/">
+<head>	
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+  <link type="text/css" rel="stylesheet" href="../dist/css/freebase-controls.css" />
+  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+  <script type="text/javascript" src="../dist/freebase.suggest.js"></script> 
+
+  <title>Freebase Suggest Example for Tagging</title>
+
+  <style type="text/css"> 
+    * { margin: 0.2em; }
+    #suggestTag a { padding:0.5em; text-decoration:none; }
+    #post { border: thin solid grey; background: lightblue; }
+  </style>
+
+</head>
+	 
+<body>
+
+<h1>Freebase Suggest for Tagging</h1>
+	     
+<textarea id="post" cols="40" rows="6">This could be an interesting post comparing the taste of hamster soup and barbecued guinea pig.</textarea>
+
+<br/>
+
+<div id="taglist">Tags: </div>
+Tag this post: <input type="text" id="suggestTag" />
+
+<script type="text/javascript">
+jQuery(function($) {
+   $("#suggestTag")
+      .freebaseSuggest()
+      .bind("fb-select", function(e, data) { 
+         $('#suggestTag').val(''); // clear the input
+         $('#taglist').append('<a href="http://freebase.com/view'+ data.id +'">'+ data.name +'</a>');
+    });
+
+});
+
+</script>
+
+
+</body>
+</html>
+
+
