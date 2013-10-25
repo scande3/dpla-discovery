@@ -1,0 +1,40 @@
+<html> 
+
+<link type="text/css" rel="stylesheet" href="../css/suggest.css" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+<script type="text/javascript" src="../js/suggest.js"></script>
+
+  <script>
+    var title = "Find topics of type /film/director (Movie Director)";
+  </script>
+  <head>
+    <title>Freebase Suggest Example - $title</title>
+  </head>
+  <body>
+    <div id="header">
+      <h1>$title</h1>
+    </div>
+    <div id="body">
+      <p><strong>Try it out:</strong></p>
+      <input type="text" id="myinput"/>
+      <script type="text/javascript">
+      $(function() {
+        $("#myinput").suggest({
+          key:"AIzaSyBBJoStIWMWfWkgHIoRtLCCAg8B4ay2Vk8",
+          filter:'(all type:/film/director)'
+        });
+      });
+      </script>
+      <p><strong>Code:</strong>
+      <pre class="prettyprint">$(function() {
+  $("#myinput").suggest({
+    key: "YOUR-API-KEY-GOES-HERE",
+    filter:'(all type:/film/director)'
+  });
+});</pre></p>
+    </div>
+    <div id="footer">
+      
+    </div>
+  </body>
+</html>

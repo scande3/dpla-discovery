@@ -1,0 +1,3 @@
+[ 
+    'suggest/js/suggest.js'
+]
