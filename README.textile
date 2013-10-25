@@ -1,3 +1,5 @@
+NOTE: Not working fully yet. Expected to work Monday.
+
 API key: 8f0de09d287758110146743c69e8ddda
 
 Based on: https://developers.google.com/freebase/v1/search-widget

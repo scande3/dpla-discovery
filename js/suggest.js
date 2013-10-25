@@ -1217,7 +1217,7 @@
           //data.filter = filter;
       }
       //$.param(data, true)
-      var url = o.service_url + o.service_path + "?" + 'q=' + '&api_key=8f0de09d287758110146743c69e8ddda';
+      var url = o.service_url + o.service_path + "?" + 'q=' + query + '&api_key=8f0de09d287758110146743c69e8ddda';
       //alert(url);
       var cached = $.suggest.cache[url];
       if (cached) {
@@ -1230,7 +1230,7 @@
       var ajax_options = {
         url: o.service_url + o.service_path + '?q=' + query + '&api_key=8f0de09d287758110146743c69e8ddda',
         //data: data,
-        //traditional: true,
+        traditional: true,
         beforeSend: function(xhr) {
           var calls = self.input.data("request.count.suggest") || 0;
           if (!calls) {
@@ -1241,12 +1241,13 @@
           self.input.data("request.count.suggest", calls);
         },
         success: function(data) {
+
           $.suggest.cache[url] = data;
           data.prefix = val;  // keep track of prefix to match up response with input value
           self.response(data, cursor ? cursor : -1);
+          
         },
         error: function(xhr) {
-          
           self.status_error();
           self.trackEvent(self.name, "request", "error", {
             url: this.url,
@@ -1438,6 +1439,7 @@
       return false;
     },
 
+    //FLYOUT DONE HERE
     flyout_request: function(data) {
       var self = this;
       var o = this.options;
@@ -1503,10 +1505,10 @@
       }
 
       clearTimeout(this.flyout_request.timeout);
-      this.flyout_request.timeout =
-        setTimeout(function() {
-          $.ajax(ajax_options);
-        }, o.xhr_delay);
+      //this.flyout_request.timeout =
+        //setTimeout(function() {
+          //$.ajax(ajax_options);
+        //}, o.xhr_delay);
 
       this.input.trigger("fb-request-flyout", ajax_options);
     },
