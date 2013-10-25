@@ -427,6 +427,7 @@
       if (this.input.data("dont_hide")) {
         return;
       }
+      //DATA input defined here
       var data = this.input.data("data.suggest");
       this.hide_all();
     },
@@ -620,12 +621,12 @@
         return;
       }
       var result = [];
-
+      
       if ($.isArray(data)) {
         result = data;
       }
-      else if ("result" in data) {
-        result = data.result;
+      else if ("docs" in data) {
+        result = data.docs;
       }
 
       var args = $.map(arguments, function(a) {
@@ -637,7 +638,8 @@
       var first = null,
           self = this,
           o = this.options;
-
+//name
+//dataProvider
       $.each(result, function(i,n) {
         if (!n.id && n.mid) {
             // For compatitibility reasons, store the mid as id
@@ -1205,16 +1207,18 @@
 
       var data = {};
       data[o.query_param_name] = query;
+      //alert(query);
 
       if (cursor) {
-        data.cursor = cursor;
+        //data.cursor = cursor;
       }
-      $.extend(data, o.ac_param, extend_ac_param);
+      //$.extend(data, o.ac_param, extend_ac_param);
       if (filter.length) {
-          data.filter = filter;
+          //data.filter = filter;
       }
-
-      var url = o.service_url + o.service_path + "?" + $.param(data, true);
+      //$.param(data, true)
+      var url = o.service_url + o.service_path + "?" + 'q=' + '&api_key=8f0de09d287758110146743c69e8ddda';
+      //alert(url);
       var cached = $.suggest.cache[url];
       if (cached) {
         this.response(cached, cursor ? cursor : -1, true);
@@ -1222,11 +1226,11 @@
       }
 
       clearTimeout(this.request.timeout);
-
+      
       var ajax_options = {
-        url: o.service_url + o.service_path,
-        data: data,
-        traditional: true,
+        url: o.service_url + o.service_path + '?q=' + query + '&api_key=8f0de09d287758110146743c69e8ddda',
+        //data: data,
+        //traditional: true,
         beforeSend: function(xhr) {
           var calls = self.input.data("request.count.suggest") || 0;
           if (!calls) {
@@ -1242,6 +1246,7 @@
           self.response(data, cursor ? cursor : -1);
         },
         error: function(xhr) {
+          
           self.status_error();
           self.trackEvent(self.name, "request", "error", {
             url: this.url,
@@ -1265,10 +1270,12 @@
     },
 
     create_item: function(data, response_data) {
+      //alert(data.sourceResource.title);
       var css = this.options.css;
       var li =  $("<li>").addClass(css.item);
       var label = $("<label>")
-        .append($.suggest.strongify(data.name || data.id, response_data.prefix));
+        .append($.suggest.strongify(data.sourceResource.title.toString() || data._id, response_data.prefix));
+
       var name = $("<div>").addClass(css.item_name)
         .append(label);
       var nt = data.notable;
@@ -1278,7 +1285,7 @@
       if ((nt != null && $.suggest.is_system_type(nt.id)) ||
           (this.options.scoring != null  &&
            this.options.scoring.toUpperCase() === 'SCHEMA')) {
-        $(":first", label).append($("<small>").text(" ("+data.id+")"));
+        $(":first", label).append($("<small>").text(" ("+data._id+")"));
       }
       var types = data.type;
       li.append(name);
@@ -1286,9 +1293,9 @@
       if (nt && nt.name) {
         type.text(nt.name);
       }
-      else if (this.options.show_id && data.id) {
+      else if (this.options.show_id && data._id) {
           // display human readable id if no notable type
-          type.text(data.id);
+          type.text(data._id);
       }
       name.prepend(type);
 
@@ -1638,13 +1645,14 @@
 
       // query param name for the search service.
       // If query name was "foo": search?foo=...
-      query_param_name: "query",
+      query_param_name: "q",
 
       // base url for autocomplete service
-      service_url: "https://www.googleapis.com/freebase/v1",
+      //service_url: "https://www.googleapis.com/freebase/v1",
+      service_url: "http://api.dp.la/v2",
 
       // service_url + service_path = url to autocomplete service
-      service_path: "/search",
+      service_path: "/items",
 
       // 'left', 'right' or null
       // where list will be aligned left or right with the input
