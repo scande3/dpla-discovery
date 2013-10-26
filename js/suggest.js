@@ -1104,7 +1104,7 @@
           this.flyout_image_url += o.flyout_image_service_path;
       }
       // set api key for image api
-      this.flyout_image_url = this.flyout_image_url.replace(/\$\{key\}/g, o.key);
+      this.flyout_image_url = this.flyout_image_url.replace(/\$\{api_key\}/g, o.api_key);
 
       if (!$.suggest.cache) {
         $.suggest.cache = {};
@@ -1211,17 +1211,17 @@
       //alert(query);
 
       if (cursor) {
-        //data.cursor = cursor;
+        data.cursor = cursor;
       }
-      //$.extend(data, o.ac_param, extend_ac_param);
+      $.extend(data, o.ac_param, extend_ac_param);
       if (filter.length) {
-          //data.filter = filter;
+          data.filter = filter;
       }
-      //$.param(data, true)
-      // TODO: remove hardcoded API key and have caller pass in as a parameter 
-      var url = o.service_url + o.service_path; // + "?" + 'q=' + query + '&api_key=8f0de09d287758110146743c69e8ddda';
+      $.param(data, true)
+      var url = o.service_url + o.service_path; 
       //alert(url);
-      var cached = $.suggest.cache[url];
+      // FIXME: Cache URL needs to include all the parameters
+      var cached = false; // $.suggest.cache[url];
       if (cached) {
         this.response(cached, cursor ? cursor : -1, true);
         return;

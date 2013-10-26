@@ -55,7 +55,8 @@
     <script>
         $(function() {
           $("#try").suggest({
-            filter: "(all type:/education/university)"
+//            filter: "(all type:/education/university)",
+	    api_key: "8f0de09d287758110146743c69e8ddda"
           })
           .bind("fb-select", function(e, data) {
             alert("You selected: " + data.name + " - " + data.mid);
