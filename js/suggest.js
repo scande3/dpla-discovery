@@ -85,9 +85,10 @@
    * to the search service as specified by service_url + service_path
    */
   var SEARCH_PARAMS = {
-      key:1, filter:1, spell:1, exact:1,
+      api_key:1 /*,  Add any other DPLA params here - delete these Freebase Search params
+      filter:1, spell:1, exact:1,
       lang:1, scoring:1, prefixed:1, stemmed:1, format:1, mql_output:1,
-      output:1
+      output:1 */
   };
 
   $.suggest = function(name, prototype) {
@@ -1217,7 +1218,8 @@
           //data.filter = filter;
       }
       //$.param(data, true)
-      var url = o.service_url + o.service_path + "?" + 'q=' + query + '&api_key=8f0de09d287758110146743c69e8ddda';
+      // TODO: remove hardcoded API key and have caller pass in as a parameter 
+      var url = o.service_url + o.service_path; // + "?" + 'q=' + query + '&api_key=8f0de09d287758110146743c69e8ddda';
       //alert(url);
       var cached = $.suggest.cache[url];
       if (cached) {
@@ -1228,8 +1230,8 @@
       clearTimeout(this.request.timeout);
       
       var ajax_options = {
-        url: o.service_url + o.service_path + '?q=' + query + '&api_key=8f0de09d287758110146743c69e8ddda',
-        //data: data,
+        url: url,
+        data: data,
         traditional: true,
         beforeSend: function(xhr) {
           var calls = self.input.data("request.count.suggest") || 0;
