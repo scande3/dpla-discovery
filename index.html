@@ -31,7 +31,7 @@
 
 <html>
   <head>
-    <title>Freebase-Suggest</title>
+    <title>DPLA Suggest</title>
     <link href="css/prettify.css" rel="stylesheet" type="text/css">
     <link href="css/suggest.css" rel="stylesheet" type="text/css">
     <style type="text/css">
@@ -67,13 +67,13 @@
     </script>
   </head>
   <body>
-    <h1>Freebase-Suggest</h1>
+    <h1>DPLA Suggest</h1>
     <p>
-      Freebase Suggest is a jQuery plugin that adds Freebase topic autocomplete to search boxes on your site. Start typing text and the widget suggests relevant matches from the millions of topics on Freebase.com or any subset of types like People, Locations or Companies. Topic flyouts help the user select the correct item which is uniquely identified with a Freebase id.
+      DPLA Suggest is a jQuery plugin that adds DPLA Search  autocomplete to search boxes on your site. Start typing text and the widget suggests relevant matches from the millions of records in DPLA. (In the future you will be able search subset of types.) Topic flyouts help the user select the correct item which is uniquely identified with a DPLA id.
     </p>
 
     <p>
-      <label for="try"><b>Try it out</b>:  select your favorite college/university:<input type="text" id="try"></label>
+      <label for="try"><b>Try it out</b>:  start typing here:<input type="text" id="try"></label>
     </p>
 
     <p>
@@ -85,7 +85,7 @@
 &lt;script&gt;
     $(function() {
       $("#try").suggest({
-        filter: "(all type:/education/university)"
+        api_key: "your DPLA key"
       })
       .bind("fb-select", function(e, data) {
         alert("You selected: " + data.name + " - " + data.mid);
@@ -114,7 +114,7 @@
         </tr>
         <tr>
           <td colspan="3">
-            This is the base url for the freebase search service.
+            This is the base url for the search service.
           </td>
         </tr>
 
@@ -126,12 +126,12 @@
             String
           </td>
           <td>
-            <b>Default: </b><code class="prettyprint">"/freebase/v1/search"</code>
+            <b>Default: </b><code class="prettyprint">"/items"</code>
           </td>
         </tr>
         <tr>
           <td colspan="3">
-            service_url + service_path = url to the freebase search service.
+            service_url + service_path = url to the search service.
           </td>
         </tr>
 
@@ -160,7 +160,7 @@
             String (URL)
           </td>
           <td>
-            <b>Default: </b><code class="prettyprint">"http://dev.freebase.com"</code>
+            <b>Default: </b><code class="prettyprint">"none"</code>
           </td>
         </tr>
         <tr>
@@ -201,7 +201,7 @@
         </tr>
         <tr>
           <td colspan="3">
-            You must provide an api key for the default search service specified by service_url + service_path. You can get one here: <a href="https://code.google.com/apis/console/">https://code.google.com/apis/console/</a>
+            You must provide an api key for the default search service specified by service_url + service_path. You can get one here: <a href="http://dp.la/info/developers/codex/policies/#get-a-key">http://dp.la/info/developers/codex/policies/#get-a-key</a>
           </td>
         </tr>
 
