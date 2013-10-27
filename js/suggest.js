@@ -85,9 +85,7 @@
    * to the search service as specified by service_url + service_path
    */
   var SEARCH_PARAMS = {
-      key:1, filter:1, spell:1, exact:1,
-      lang:1, scoring:1, prefixed:1, stemmed:1, format:1, mql_output:1,
-      output:1
+      api_key:1 //  Add any other DPLA search params here
   };
 
   $.suggest = function(name, prototype) {
@@ -1028,43 +1026,6 @@
         return [qstr, filters, overrides];
     },
 
-    /**
-     * Convenient methods and regexs to determine valid mql ids.
-     */
-    mqlkey_fast: /^[_A-Za-z0-9][A-Za-z0-9_-]*$/,
-    mqlkey_slow: /^(?:[A-Za-z0-9]|\$[A-F0-9]{4})(?:[A-Za-z0-9_-]|\$[A-F0-9]{4})*$/,
-    check_mql_key: function(val) {
-        if ($.suggest.mqlkey_fast.test(val)) {
-            return true;
-        }
-        else if ($.suggest.mqlkey_slow.test(val)) {
-            return true;
-        }
-        return false;
-    },
-    check_mql_id: function(val) {
-        if (val.indexOf("/") === 0) {
-            var keys = val.split("/");
-            // remove beginning '/'
-            keys.shift();
-            if (keys.length == 1 && keys[0] === "") {
-                // "/" is a valid id
-                return true;
-            }
-            else {
-                for (var i=0,l=keys.length; i<l; i++) {
-                    if (!$.suggest.check_mql_key(keys[i])) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        }
-        else {
-            return false;
-        }
-    },
-
     is_system_type: function(type_id) {
       if (type_id == null) {
         return false;
@@ -1103,7 +1064,7 @@
           this.flyout_image_url += o.flyout_image_service_path;
       }
       // set api key for image api
-      this.flyout_image_url = this.flyout_image_url.replace(/\$\{key\}/g, o.key);
+      this.flyout_image_url = this.flyout_image_url.replace(/\$\{api_key\}/g, o.api_key);
 
       if (!$.suggest.cache) {
         $.suggest.cache = {};
@@ -1180,6 +1141,7 @@
       // SEARCH_PARAMS can be overridden inline
       var extend_ac_param = null;
 
+      // TODO rip out all filter S-expression stuff (replace with simple type?
       if ($.type(filter) === "string") {
           // the original filter may be a single filter param (string)
           filter = [filter];
@@ -1195,30 +1157,21 @@
               filter.push("(all " + structured[1].join(" ") + ")");
           }
           extend_ac_param = structured[2];
-          if ($.suggest.check_mql_id(query)) {
-              // handle anything that looks like a valid mql id:
-              // filter=(all%20alias{start}:/people/pers)&prefixed=true
-              filter.push("(any alias{start}:\"" + query + "\" mid:\"" +
-                          query + "\")");
-              extend_ac_param['prefixed'] = true;
-              query = "";
-          }
       }
 
       var data = {};
       data[o.query_param_name] = query;
-      //alert(query);
 
+      // TODO: pagination done differently for DPLA
       if (cursor) {
-        //data.cursor = cursor;
+        data.cursor = cursor;
       }
-      //$.extend(data, o.ac_param, extend_ac_param);
+      $.extend(data, o.ac_param, extend_ac_param);
       if (filter.length) {
-          //data.filter = filter;
+          data.filter = filter;
       }
-      //$.param(data, true)
-      var url = o.service_url + o.service_path + "?" + 'q=' + query + '&api_key=8f0de09d287758110146743c69e8ddda';
-      //alert(url);
+      $.param(data, true)
+      var url = o.service_url + o.service_path + "?" + $.param(data, true);
       var cached = $.suggest.cache[url];
       if (cached) {
         this.response(cached, cursor ? cursor : -1, true);
@@ -1228,8 +1181,8 @@
       clearTimeout(this.request.timeout);
       
       var ajax_options = {
-        url: o.service_url + o.service_path + '?q=' + query + '&api_key=8f0de09d287758110146743c69e8ddda',
-        //data: data,
+        url: o.service_url + o.service_path,
+        data: data,
         traditional: true,
         beforeSend: function(xhr) {
           var calls = self.input.data("request.count.suggest") || 0;
@@ -1257,8 +1210,6 @@
         },
         complete: function(xhr) {
           if (xhr) {
-            self.trackEvent(self.name, "request", "tid",
-            xhr.getResponseHeader("X-Metaweb-TID"));
           }
         },
         dataType: "jsonp",
@@ -1595,25 +1546,23 @@
     }
   });
 
-  // Freebase suggest settings
+  // DPLA  suggest settings
   $.extend($.suggest.suggest, {
 
     defaults: {
       /**
        * filter, spell, lang, exact, scoring, key, prefixed, stemmed, format
        *
-       * are the new parameters used by the new freebase search on googleapis.
-       * Please refer the the API documentation as these parameters
-       * will be transparently passed through to the search service.
-       *
-       * @see http://wiki.freebase.com/wiki/ApiSearch
+       * TODO: These represent the defaults for the Freebase search API.  
+       * They need to be updated for the DPLA API.
        */
 
-      // search filters
+      // search filters 
+      // TODO: Switch back to old style type parameter instead of filter S-expressions
       filter: null,
 
       // spelling corrections
-      spell: "always",
+      spell: null, // "always",
 
       exact: false,
 
@@ -1622,8 +1571,8 @@
       // language to search (default to en)
       lang: null, // NULL defaults to "en",
 
-      // API key: required for googleapis
-      key: null,
+      // API key: required for DPLA
+      api_key: null,
 
       prefixed: true,
 
@@ -1650,10 +1599,10 @@
       query_param_name: "q",
 
       // base url for autocomplete service
-      //service_url: "https://www.googleapis.com/freebase/v1",
       service_url: "http://api.dp.la/v2",
 
       // service_url + service_path = url to autocomplete service
+      // FIXME: items and collections have different service paths for search
       service_path: "/items",
 
       // 'left', 'right' or null
@@ -1669,6 +1618,7 @@
       // flyout_service_url + flyout_service_path =
       // url to search with
       // output=(notable:/client/summary (description citation) type).
+      // TODO: Need new template here (unless we've got everything in the search results already)
       flyout_service_path: "/search?filter=(all mid:${id})&" +
           "output=(notable:/client/summary " +
           "(description citation provenance) type)&key=${key}",
