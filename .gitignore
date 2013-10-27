@@ -1,1 +1,10 @@
-*~
+# Specific Files to ignore #
+############################
+Thumbs.db
+Icon?
+.DS_Store?
+.DS_Store
+ehthumbs.db
+.idea # Rubymine config files
+/.idea/*
+*~ #Linux temp files

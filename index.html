@@ -29,6 +29,10 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  !!-->
 
+<!!--
+Modified to search DPLA by:
+Steven Anderson (sanderson@bpl.org)
+!!-->
 <html>
   <head>
     <title>DPLA Suggest</title>
@@ -55,11 +59,10 @@
     <script>
         $(function() {
           $("#try").suggest({
-//            filter: "(all type:/education/university)",
-	    api_key: "8f0de09d287758110146743c69e8ddda"
+	        api_key: "8f0de09d287758110146743c69e8ddda"
           })
           .bind("fb-select", function(e, data) {
-            alert("You selected: " + data.name + " - " + data.mid);
+            window.open(data.isShownAt, '_blank');
           });
 
           prettyPrint();
@@ -88,7 +91,8 @@
         api_key: "your DPLA key"
       })
       .bind("fb-select", function(e, data) {
-        alert("You selected: " + data.name + " - " + data.mid);
+         window.open(data.isShownAt, '_blank');
+         //To use same window, do window.open(data.isShownAt, '_self');
       });
     });
 &lt;/script&gt;
@@ -98,568 +102,31 @@
     </p>
 
     <p>
-      <h2>Options</h2>
+    </p>
+
+    <p>
+      <h2>Options (more coming soon)</h2>
 
       <table class="options">
         <tr>
           <td>
-            <code>service_url</code>
-          </td>
-          <td>
-            String (URL)
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">"https://www.googleapis.com"</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            This is the base url for the search service.
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>service_path</code>
+            <code>api_key</code>
           </td>
           <td>
             String
           </td>
           <td>
-            <b>Default: </b><code class="prettyprint">"/items"</code>
+            <b>Default: </b>None
           </td>
         </tr>
         <tr>
           <td colspan="3">
-            service_url + service_path = url to the search service.
+            This is the API Key for your DPLA requests. To get one, please visit: <a href='http://dp.la/info/developers/codex/policies/#get-a-key'>http://dp.la/info/developers/codex/policies/#get-a-key</a>
           </td>
         </tr>
-
-        <tr>
-          <td>
-            <code>flyout</code>
-          </td>
-          <td>
-            Boolean
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">true</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            whether or not to show flyout on mouseover
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>flyout_service_url</code>
-          </td>
-          <td>
-            String (URL)
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">"none"</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            This is the base url for the flyout service.
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>flyout_service_path</code>
-          </td>
-          <td>
-            String
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">"/flyout?id=${id}"</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            flyout_service_url + flyout_service_path = url to flyout service.
-            "${id}" will always be replaced with the id of the current mouseover item.
-            (e.g., "http://dev.freebase.com/m/045c7b?flyout")
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>key</code>
-          </td>
-          <td>
-            String
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">null</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            You must provide an api key for the default search service specified by service_url + service_path. You can get one here: <a href="http://dp.la/info/developers/codex/policies/#get-a-key">http://dp.la/info/developers/codex/policies/#get-a-key</a>
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>filter</code>
-          </td>
-          <td>
-            String, Array
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">null</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            You can specify default search filter constraint(s) that will be
-            transparently passed to the search service as a filter parameter(s).
-            For example, to constrain suggest to only search on colleges and/or universities,
-            you could use "(all type:/education/university)" as a filter.
-            See <a href="http://wiki.freebase.com/wiki/ApiSearch">http://wiki.freebase.com/wiki/ApiSearch</a> or <a href="http://wiki.freebase.com/wiki/Search_Cookbook#Textual_Constraints">http://wiki.freebase.com/wiki/Search_Cookbook#Textual_Constraints</a> for a comprehensive list of available search filters.
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>lang</code>
-          </td>
-          <td>
-            String
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">null</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            The lang parameter accepts a comma-separated list of language codes that cause the search to be done in all the languages specified and the results to be ranked in the first language listed and displayed in the first language of the list that has a name for the entity. Currently, nine languages are supported: english (en), spanish (es), french (fr), german (de), italian (it), portuguese (pt), chinese (zh), japanese (ja) and korean (ko). English has by far the most coverage and is the default language. This value is transparently passed to the search service.
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>spell</code>
-          </td>
-          <td>
-            String
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">"always"</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            Valid values are "always", "no_results", "no_spelling".
-            If spelling is requested and the search returns a spelling correction,
-            suggest will display the correction in the suggest list.
-            This value is transparently passed to the search service.
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>exact</code>
-          </td>
-          <td>
-            Boolean
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">false</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            If TRUE, you can specify the search service to return only exact matches (of what's in the input). This value is transparently passed to the search service.
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>scoring</code>
-          </td>
-          <td>
-            String
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">null</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">           
-            <table>
-              <tr>
-                <td colspan="2">
-                  The scoring parameter makes it possible to control what relevance score components are used to compute the final score. This value is transparently passed to the search service.
-                </td>
-              </tr>
-              <tr>
-                <td><code class="prettyprint">"freebase"</code></td>
-                <td>Use only the Freebase relevance score.</td>
-              </tr>
-              <tr>
-                <td><code class="prettyprint">"entity"</code></td>
-                <td>Use both FREEBASE and Google relevance scores, defaulting missing Google scores to 1.0. This is the default.</td>
-              </tr>
-              <tr>
-                <td><code class="prettyprint">"schema"</code></td>
-                <td>Use when looking for schema entities like types, properties or domains. The link counts of schema entities is computed differently.</td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>prefixed</code>
-          </td>
-          <td>
-            Boolean
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">true</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            This value is transparently passed to the search service. During indexing, textual data is normalized in a language-specific way. For example, in english, text is lowercased and accents are removed. At query time, the same language-specific normalization is performed on the query text. Several parameters control how a textual constraint is matched: prefixed set to true triggers a prefix match on name and aliases only (and a regular match on other textual data). For example: query: "bob dy" prefixed: true.
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>stemmed</code>
-          </td>
-          <td>
-            Boolean
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">null</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            This value is transparently passed to the search service. During indexing, textual data is normalized in a language-specific way. For example, in english, text is lowercased and accents are removed. At query time, the same language-specific normalization is performed on the query text. Several parameters control how a textual constraint is matched: stemmed set to true triggers a stemmed match on name and aliases only (and a regular match on other textual data). Stemmed matches may be used to paste over language-specific suffix differences introduced by plurals or other grammatical forms. For example: query: "potatos" stemmed: true.</td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>format</code>
-          </td>
-          <td>
-            String
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">"ac"</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            Controls the JSON response format of the search service result. Suggest expects the results to be in the default "ac" format. Other availble formats are: "ac", "classic", "entity", "guids", "ids", "mids". This value is transparently passed to the search service.
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>advanced</code>
-          </td>
-          <td>
-            Boolean
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">true</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            If TRUE, suggest will parse and handle inline name:value pairs in the input as additional filter constraints. For example, for 'bob type:artist contributed_to:"Love and Theft"', an additional filter constraint, '(all type:artist contributed_to:"Love and Theft")' will passed to search. Additionally when advanced is TRUE, suggest will recognize freebase ids/mids so that one can directly search for an entity by it's id or mid.
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>query_param_name</code>
-          </td>
-          <td>
-            String
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">"query"</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            This is the query parameter name to use for the actual search query string. For example, if the query name was "foo", /search?foo=... Default name is "query".
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>align</code>
-          </td>
-          <td>
-            String
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">null</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            Valid values are "left", "right". By default, suggest will position the suggest list as best as possible. However, you can force the suggest list to be aligned flushed "left" or "right" with the input box.
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>suggest_new</code>
-          </td>
-          <td>
-            Boolean
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">null</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            This can be any text to be shown below the suggestion list.
-            On selection, an 'fb-select-new' will be triggered.
-            This can be used if you would like to handle the case when the user does not find what she's looking for.
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>soft</code>
-          </td>
-          <td>
-            Boolean
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">false</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            By default, when the suggest list is displayed, 
-            suggest intercepts the ENTER key and auto-selects the first item when no item is selected.
-            This prevents classic search box behaviors when coupled with suggest.
-            To enable submission of your form on ENTER in this state, set this to TRUE.
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>status</code>
-          </td>
-          <td>
-            Array[4](String)
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">["Start typing to get suggestions...", "Searching...", "Select an item from the list:", "Sorry, something went wrong. Please try again later"]</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            Status messages that appear at the 4 different stages of suggest; [0] When input box is empty and gets focus. [1] when retrieving results, [2] when displaying the results, [3] when there is an error from the search service. You can override these default status messages by passing in a different Array of string corresponding to the 4 different stages.
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>parent</code>
-          </td>
-          <td>
-            String (jQuery selector)
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">null</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            By default, the suggest list is appended to the document body and positioned absolutely with respect to the input. You can specify a different parent and the list will not be absolutely positioned.
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>flyout_parent</code>
-          </td>
-          <td>
-            String (jQuery selector)
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">null</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            By default, the flyout container is appended to the document body and positioned absolutely. You can specify a different parent and the flyout will not be absolutely positioned.
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>animate</code>
-          </td>
-          <td>
-            Boolean
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">false</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            If true, the showing of the suggest list will be animated using jQuery slideDown effect.
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>xhr_delay</code>
-          </td>
-          <td>
-            Integer (ms)
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">200</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            This is mostly useful in the case where filters are complex and search service might take more or similar time to answer than the hardcoded delay, causing a somewhat degraded user experience and unnecessary load.
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>zIndex</code>
-          </td>
-          <td>
-            Integer
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">null</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            You can specifically set the z-index of the outer most containers (fbs-pane, fbs-flyoutpane). This is useful when using suggest in dialog boxes so that the suggest elements display on top.
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>css</code>
-          </td>
-          <td>
-            Object
-          </td>
-          <td>
-            &nbsp;
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            You can overwrite default css class names used for the various suggest elements
-            <table>
-              <tbody>
-                <tr>
-                  <td>pane</td>
-                  <td>The outer container of the suggest list.</td>
-                  <td><b>Default:</b> 'fbs-pane'</td>
-                </tr>
-                <tr>
-                  <td>list</td>
-                  <td>The suggest list.</td>
-                  <td><b>Default:</b> 'fbs-list'</td>
-                </tr>
-                <tr>
-                  <td>item</td>
-                  <td>The suggest list items.</td>
-                  <td><b>Default:</b> 'fbs-item'.</td>
-                </tr>
-                <tr>
-                  <td>item_name</td>
-                  <td>The element containing the the name of the item.</td>
-                  <td><b>Default:</b> 'fbs-item-name'</td>
-                </tr>
-                <tr>
-                  <td>selected</td>
-                  <td>The current highlighted/selected item.</td>
-                  <td><b>Default:</b> 'fbs-selected'.</td>
-                </tr>
-                <tr>
-                  <td>status</td>
-                  <td>The element containing the status messages.</td>
-                  <td><b>Default:</b> 'fbs-status'.</td>
-                </tr>
-                <tr>
-                  <td>item_type</td>
-                  <td>The element containing the notable type of an item.</td>
-                  <td><b>Default:</b> 'fbs-item-type'.</td>
-                </tr>
-                <tr>
-                  <td>flyoutpane</td>
-                  <td>The flyout outer container.</td>
-                  <td><b>Default:</b>  'fbs-flyoutpane'.</td>
-                </tr>
-              </tbody>
-            </table>
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <code>css_prefix</code>
-          </td>
-          <td>
-            String
-          </td>
-          <td>
-            <b>Default: </b><code class="prettyprint">null</code>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            You can specify a prefix to be pre-pended to the class names of the the suggest elements. For example if css_prefix is "foo-" the container names will be "foo-fbs-pane" and "foo-fbs-flyoutpane".
-          </td>
-        </tr>
-        
-      </table>
-    </p>
+     </table>
 
 
-    <p>
-      <h2>Events</h2>
-      <p>
-        Freebase Suggest triggers the following events within the context of the input that it is initialized with.
-      </p>
-      
-      <p>
-        fb-select - When an item is selected from the suggest list. The event is accompanied by a data object where data.name and data.id represent the name and id of the item that was selected.
-      </p>  
-      <pre><code class="prettyprint">
-$("#myinput").suggest().bind("fb-select", function(e, data) { ... });
-      </code></pre>
-      
-      <hr class="space"/>
-      
-      <p>
-        fb-select-new - When the suggest_new option is enabled, this event is triggered when the suggest_new item is selected. The event is accompanied by the input value.
-      </p>
-      <pre><code class="prettyprint">
-$("#myinput").suggest({'suggest_new': 'This is the suggest new text'}).bind("fb-select-new", function(e, val) { ... });
-      </code></pre>
     </p>
   </body>
 </html>

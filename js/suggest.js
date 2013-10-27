@@ -30,6 +30,13 @@
  *
  * @author Dae Park (daepark@google.com)
  */
+
+/*
+ * Modified to search DPLA instead. Current contributers:
+ * Steven Anderson (sanderson@bpl.org)
+ * Tom Morris (http://tfmorris.blogspot.com)
+ * Chris Strauber (Tufts University)
+ */
 (function($, undefined){
 
   if (!("console" in window)) {
@@ -1042,68 +1049,69 @@
   };
 
 
-  // *THE* Freebase suggest implementation
-  $.suggest("suggest", {
-    _init: function() {
-      var self = this,
-          o = this.options;
-      if (o.flyout_service_url == null) {
-        o.flyout_service_url = o.service_url;
-      }
-      this.flyout_url = o.flyout_service_url;
-      if (o.flyout_service_path) {
-          this.flyout_url += o.flyout_service_path;
-      }
-      // set api key for flyout service (search)
-      this.flyout_url = this.flyout_url.replace(/\$\{key\}/g, o.key);
-      if (o.flyout_image_service_url == null) {
-        o.flyout_image_service_url = o.service_url;
-      }
-      this.flyout_image_url = o.flyout_image_service_url;
-      if (o.flyout_image_service_path) {
-          this.flyout_image_url += o.flyout_image_service_path;
-      }
-      // set api key for image api
-      this.flyout_image_url = this.flyout_image_url.replace(/\$\{api_key\}/g, o.api_key);
+    // *THE* Freebase suggest implementation
+    $.suggest("suggest", {
+        _init: function() {
+            var self = this,
+                o = this.options;
+            if (o.flyout_service_url == null) {
+                o.flyout_service_url = o.service_url;
+            }
+            this.flyout_url = o.flyout_service_url;
+            if (o.flyout_service_path) {
+                this.flyout_url += o.flyout_service_path;
+            }
+            // set api key for flyout service (search)
 
-      if (!$.suggest.cache) {
-        $.suggest.cache = {};
-      }
+            this.flyout_url = this.flyout_url.replace(/\$\{key\}/g, o.api_key);
+            if (o.flyout_image_service_url == null) {
+                o.flyout_image_service_url = o.service_url;
+            }
+            this.flyout_image_url = o.flyout_image_service_url;
+            if (o.flyout_image_service_path) {
+                this.flyout_image_url += o.flyout_image_service_path;
+            }
+            // set api key for image api
+            this.flyout_image_url = this.flyout_image_url.replace(/\$\{key\}/g, o.api_key);
 
-      if (o.flyout) {
-        this.flyoutpane = $('<div style="display:none;" class="fbs-reset">')
-            .addClass(o.css.flyoutpane);
+            if (!$.suggest.cache) {
+                $.suggest.cache = {};
+            }
 
-        if (o.flyout_parent) {
-          $(o.flyout_parent).append(this.flyoutpane);
-        }
-        else {
-          this.flyoutpane.css("position","absolute");
-          if (o.zIndex) {
-            this.flyoutpane.css("z-index", o.zIndex);
-          }
-          $(document.body).append(this.flyoutpane);
-        }
-        var hoverover = function(e) {
-          self.hoverover_list(e);
-        };
-        var hoverout = function(e) {
-          self.hoverout_list(e);
-        };
-        this.flyoutpane.hover(hoverover, hoverout)
-          .bind("mousedown.suggest", function(e) {
-            e.stopPropagation();
-            self.pane.click();
-          });
+            if (o.flyout) {
+                this.flyoutpane = $('<div style="display:none;" class="fbs-reset">')
+                    .addClass(o.css.flyoutpane);
 
-        if (!$.suggest.flyout) {
-          $.suggest.flyout = {};
-        }
-        if (!$.suggest.flyout.cache) {
-          $.suggest.flyout.cache = {};
-        }
-      }
-    },
+                if (o.flyout_parent) {
+                    $(o.flyout_parent).append(this.flyoutpane);
+                }
+                else {
+                    this.flyoutpane.css("position","absolute");
+                    if (o.zIndex) {
+                        this.flyoutpane.css("z-index", o.zIndex);
+                    }
+                    $(document.body).append(this.flyoutpane);
+                }
+                var hoverover = function(e) {
+                    self.hoverover_list(e);
+                };
+                var hoverout = function(e) {
+                    self.hoverout_list(e);
+                };
+                this.flyoutpane.hover(hoverover, hoverout)
+                    .bind("mousedown.suggest", function(e) {
+                        e.stopPropagation();
+                        self.pane.click();
+                    });
+
+                if (!$.suggest.flyout) {
+                    $.suggest.flyout = {};
+                }
+                if (!$.suggest.flyout.cache) {
+                    $.suggest.flyout.cache = {};
+                }
+            }
+        },
 
     _destroy: function() {
       base._destroy.call(this);
@@ -1178,6 +1186,14 @@
         return;
       }
 
+      var api_key = o.ac_param.api_key;
+      if (api_key == null)
+      {
+          alert('Please set your API Key.');
+          return false;
+      }
+      data.api_key = api_key;
+
       clearTimeout(this.request.timeout);
       
       var ajax_options = {
@@ -1222,37 +1238,54 @@
     },
 
     create_item: function(data, response_data) {
-      //alert(data.sourceResource.title);
-      var css = this.options.css;
-      var li =  $("<li>").addClass(css.item);
-      var label = $("<label>")
-        .append($.suggest.strongify(data.sourceResource.title.toString() || data._id, response_data.prefix));
+        var css = this.options.css;
+        var li =  $("<li>").addClass(css.item);
+        var label = $("<label>")
+            .append($.suggest.strongify(data.sourceResource.title.toString() || data._id, response_data.prefix));
 
-      var name = $("<div>").addClass(css.item_name)
-        .append(label);
-      var nt = data.notable;
-      if (data.under) {
-        $(":first", label).append($("<small>").text(" ("+data.under+")"));
-      }
-      if ((nt != null && $.suggest.is_system_type(nt.id)) ||
-          (this.options.scoring != null  &&
-           this.options.scoring.toUpperCase() === 'SCHEMA')) {
-        $(":first", label).append($("<small>").text(" ("+data._id+")"));
-      }
-      var types = data.type;
-      li.append(name);
-      var type = $("<div>").addClass(css.item_type);
-      if (nt && nt.name) {
-        type.text(nt.name);
-      }
-      else if (this.options.show_id && data._id) {
-          // display human readable id if no notable type
-          type.text(data._id);
-      }
-      name.prepend(type);
+        var name = $("<div>").addClass(css.item_name)
+            .append(label);
 
-      //console.log("create_item", li);
-      return li;
+        //Debating if to add
+        if (data.sourceResource.subject) {
+            for (var i = 0; i < data.sourceResource.subject.length; i++) {
+                // $(":first", label).append($("<small>").text(" ("+data.sourceResource.subject[i].name+")"));
+            }
+        }
+
+        //Not implemented yet
+        var nt = data.notable;
+        if ((nt != null && $.suggest.is_system_type(nt.id)) ||
+            (this.options.scoring != null  &&
+                this.options.scoring.toUpperCase() === 'SCHEMA')) {
+            $(":first", label).append($("<small>").text(" ("+data._id+")"));
+        }
+
+        var types = data.type;
+        li.append(name);
+        var type = $("<div>").addClass(css.item_type);
+        if (nt && nt.name) {
+            type.text(nt.name);
+        }
+        else if (this.options.show_id && data._id) {
+            // display human readable id if no notable type
+            //type.text(data._id);
+
+            //type.text(data.dataProvider.toString());
+        }
+
+        if (data.sourceResource.specType) {
+
+            type.text(data.sourceResource.specType);
+        }
+        else {
+            type.text(data.sourceResource.type);
+        }
+
+        name.prepend(type);
+
+        //console.log("create_item", li);
+        return li;
     },
 
 
@@ -1392,76 +1425,79 @@
 
     //FLYOUT DONE HERE
     flyout_request: function(data) {
-      var self = this;
-      var o = this.options;
-      var sug_data = this.flyoutpane.data("data.suggest");
-      if (sug_data && data.id === sug_data.id) {
-        if (!this.flyoutpane.is(":visible")) {
-          var s = this.get_selected();
-          this.flyout_position(s);
-          this.flyoutpane.show();
-          this.input.trigger("fb-flyoutpane-show", this);
+        var self = this;
+        var o = this.options;
+        var sug_data = this.flyoutpane.data("data.suggest");
+
+        if (sug_data && data.id === sug_data.id) {
+            if (!this.flyoutpane.is(":visible")) {
+                var s = this.get_selected();
+                this.flyout_position(s);
+                this.flyoutpane.show();
+                this.input.trigger("fb-flyoutpane-show", this);
+            }
+            return;
         }
-        return;
-      }
 
-      // check $.suggest.flyout.cache
-      var cached = $.suggest.flyout.cache[data.id];
-      if (cached && cached.id && cached.html) {
-        // CLI-10009: use cached item only if id and html present
-        this.flyout_response(cached);
-        return;
-      }
+        // check $.suggest.flyout.cache
+        var cached = $.suggest.flyout.cache[data.id];
+        if (cached && cached.id && cached.html) {
+            // CLI-10009: use cached item only if id and html present
+            this.flyout_response(cached);
+            return;
+        }
 
-      //this.flyoutpane.hide();
-      var flyout_id = data.id;
-      var url = this.flyout_url.replace(/\$\{id\}/g, data.id);
+        //this.flyoutpane.hide();
+        var flyout_id = data.id;
+        var url = this.flyout_url.replace(/\$\{id\}/g, data.id);
 
-      var ajax_options = {
-        url: url,
-        traditional: true,
-        beforeSend: function(xhr) {
-          var calls = self.input.data("flyout.request.count.suggest") || 0;
-          calls += 1;
-          self.trackEvent(self.name, "flyout.request", "count", calls);
-          self.input.data("flyout.request.count.suggest", calls);
-        },
-        success: function(data) {
-          data["req:id"] = flyout_id;
-          if (data['result'] && data['result'].length) {
-            data.html =
-                $.suggest.suggest.create_flyout(data['result'][0],
-                    self.flyout_image_url);
-          }
-          $.suggest.flyout.cache[flyout_id] = data;
-          self.flyout_response(data);
-        },
-        error: function(xhr) {
-          self.trackEvent(self.name, "flyout", "error", {
-            url:this.url,
-            response: xhr ? xhr.responseText : ''
-          });
-        },
-        complete: function(xhr) {
-          if (xhr) {
-            self.trackEvent(self.name, "flyout", "tid",
-            xhr.getResponseHeader("X-Metaweb-TID"));
-          }
-        },
-        dataType: "jsonp",
-        cache: true
-      };
-      if (o.flyout_lang) {
-          ajax_options.data = {lang:o.flyout_lang};
-      }
 
-      clearTimeout(this.flyout_request.timeout);
-      //this.flyout_request.timeout =
-        //setTimeout(function() {
-          //$.ajax(ajax_options);
-        //}, o.xhr_delay);
+        var ajax_options = {
+            url: url,
+            traditional: true,
+            beforeSend: function(xhr) {
 
-      this.input.trigger("fb-request-flyout", ajax_options);
+                var calls = self.input.data("flyout.request.count.suggest") || 0;
+                calls += 1;
+                self.trackEvent(self.name, "flyout.request", "count", calls);
+                self.input.data("flyout.request.count.suggest", calls);
+            },
+            success: function(data) {
+                data["req:id"] = flyout_id;
+                if (data['docs'] && data['docs'].length) {
+                    data.html =
+                        $.suggest.suggest.create_flyout(data['docs'][0],
+                            self.flyout_image_url);
+                }
+                $.suggest.flyout.cache[flyout_id] = data;
+                self.flyout_response(data);
+            },
+            error: function(xhr) {
+                self.trackEvent(self.name, "flyout", "error", {
+                    url:this.url,
+                    response: xhr ? xhr.responseText : ''
+                });
+            },
+            complete: function(xhr) {
+                if (xhr) {
+                    self.trackEvent(self.name, "flyout", "tid",
+                        xhr.getResponseHeader("X-Metaweb-TID"));
+                }
+            },
+            dataType: "jsonp",
+            cache: true
+        };
+        if (o.flyout_lang) {
+            ajax_options.data = {lang:o.flyout_lang};
+        }
+
+        clearTimeout(this.flyout_request.timeout);
+        this.flyout_request.timeout =
+            setTimeout(function() {
+                $.ajax(ajax_options);
+            }, o.xhr_delay);
+
+        this.input.trigger("fb-request-flyout", ajax_options);
     },
 
     flyout_response: function(data) {
@@ -1619,13 +1655,12 @@
       // url to search with
       // output=(notable:/client/summary (description citation) type).
       // TODO: Need new template here (unless we've got everything in the search results already)
-      flyout_service_path: "/search?filter=(all mid:${id})&" +
-          "output=(notable:/client/summary " +
-          "(description citation provenance) type)&key=${key}",
+      flyout_service_path: "/items?id=${id}" + "&api_key=${key}",
 
       // default is service_url if NULL
       flyout_image_service_url: null,
 
+      //TODO: Remove this unused parameter
       flyout_image_service_path:
           "/image${id}?maxwidth=75&key=${key}&errorid=/freebase/no_image_png",
 
@@ -1764,145 +1799,147 @@
      *   already encoded into the url template.
      */
     create_flyout: function(data, flyout_image_url) {
-      var get_value_by_keys = $.suggest.suggest.get_value_by_keys;
-      var get_value = $.suggest.suggest.get_value;
-      var is_system_type = $.suggest.is_system_type;
-      var is_commons_id = $.suggest.suggest.is_commons_id;
 
-      var name = data['name'];
-      var id = null;
-      var image = null;
-      var notable_props = [];
-      var notable_types = [];
-      var notable_seen = {}; // Notable types already added
-      var notable = get_value(data, 'notable');
-      if (notable && notable['name']) {
-        notable_types.push(notable['name']);
-        notable_seen[notable['name']] = true;
-      }
-      if (notable && is_system_type(notable['id'])) {
-        id = data['id'];
-      }
-      else {
-        id = data['mid'];
-        image = flyout_image_url.replace(/\$\{id\}/g, id);
-      }
+        var get_value_by_keys = $.suggest.suggest.get_value_by_keys;
+        var get_value = $.suggest.suggest.get_value;
+        var is_system_type = $.suggest.is_system_type;
+        var is_commons_id = $.suggest.suggest.is_commons_id;
 
-      var desc_text = null;
-      var desc_source = null;
-      var desc_provider = null;
-      var desc_statement = null;
-      var descs = get_value_by_keys(
-          data, 'output', 'description', '/common/topic/description') || [];
-      if (descs.length) {
-        var best = descs[0];
-        $.each(descs, function(i, desc) {
-          if (get_value_by_keys(desc, 'citation', 0, 'mid') == '/m/0d07ph') {
-            // Prefer 'Wikipedia" descriptions (/m/0d07ph).
-            best = desc;
-            return false;
-          }
-          return true;
-        });
-        if ($.isArray(best.value) && best.value.length) {
-          desc_text = best.value[0].value;
-        } else {
-          desc_text = best.value;
+        //toString as sometimes array, sometimes just string...
+        var name = data['sourceResource']['title'].toString();
+        var id = null;
+        var image = null;
+        var notable_props = [];
+        var notable_types = [];
+        var notable_seen = {}; // Notable types already added
+        var notable = get_value(data, 'notable');
+        if (notable && notable['name']) {
+            notable_types.push(notable['name']);
+            notable_seen[notable['name']] = true;
         }
-        if (get_value_by_keys(best, 'provenance', 0, 'restrictions', 0) ==
-            'REQUIRES_CITATION') {
-          desc_source = get_value_by_keys(best, 'provenance', 0, 'source', 0);
-          desc_provider =
-              get_value_by_keys(best, 'citation', 'provider', 0, 'name');
-          if (desc_provider && $.isArray(desc_provider) &&
-              desc_provider.length) {
-            desc_provider = desc_provider[0].value;
-          }
-          desc_statement = get_value_by_keys(best, 'citation', 'statement', 0);
-          if (desc_statement && desc_statement.value) {
-            desc_statement = desc_statement.value;
-          }
+        if (notable && is_system_type(notable['id'])) {
+            id = data['id'];
         }
-      } else {
-        // Handle "old" output description format.
-        $.each(['wikipedia', 'freebase'], function(i, key) {
-          descs = get_value(data, ['output', 'description', key], true);
-          if (descs && descs.length) {
-            desc_text = descs[0];
-            desc_provider = key;
-            return false;
-          }
-          return true;
-        });
-      }
-      var summary = get_value(data, ['output', 'notable:/client/summary']);
-      if (summary) {
-        var notable_paths = get_value(summary, '/common/topic/notable_paths');
-        if (notable_paths && notable_paths.length) {
-          $.each(notable_paths, function(i, path) {
-            var values = get_value(summary, path, true);
-            if (values && values.length) {
-              values = values.slice(0, 3);
-              var prop_text = path.split('/').pop();
-              notable_props.push([prop_text, values.join(', ')]);
+        else {
+            id = data['mid'];
+            image = flyout_image_url.replace(/\$\{id\}/g, id);
+
+        }
+
+        id = data['sourceResource']['type']
+
+        if(data['sourceResource']['specType'])
+        {
+            id = id + ' (' + data['sourceResource']['specType'] + ')';
+        }
+
+        if(data['object'])  {
+            image = data['object'].toString();
+        }
+        else {
+            /*if (data['sourceResource']['type'] == 'text') {
+             image = 'http://dp.la/assets/icon-text-b2bb9d2fd006d8e87b24613a4d4f362e.gif';
+             }
+             else {
+             image = 'http://dp.la/assets/icon-image-5353cdabb05a15a81b51f4ac0f1bfe7e.gif';
+             }*/
+            image = null;
+
+        }
+
+
+
+        if (data['sourceResource']['date']) {
+            notable_props.push(['Date', data['sourceResource']['date']['displayDate']]);
+        }
+
+        if (data['sourceResource']['subject']) {
+            for (var i = 0; i < data['sourceResource']['subject'].length; i++) {
+                notable_props.push(['Subject', data['sourceResource']['subject'][i]['name']]);
             }
-          });
-        }
-      }
-      var types = get_value(
-          data, ['output', 'type', '/type/object/type'], true);
-      if (types && types.length) {
-        $.each(types, function(i, t) {
-          if (!notable_seen[t]) {
-            notable_types.push(t);
-            notable_seen[t] = true;
-          }
-        });
-      }
-      var content = $('<div class="fbs-flyout-content">');
-      if (name) {
-        content.append($('<h1 id="fbs-flyout-title">').text(name));
-      }
-      content
-          .append($('<h3 class="fbs-topic-properties fbs-flyout-id">')
-          .text(id));
-      notable_props = notable_props.slice(0, 3);
-      $.each(notable_props, function(i, prop) {
-          content.append($('<h3 class="fbs-topic-properties">')
-              .append($('<strong>').text(prop[0] + ': '))
-              .append(document.createTextNode(prop[1])));
-          });
-      if (desc_text) {
-        var article = $('<p class="fbs-topic-article">');
-        if (desc_provider) {
-          if (desc_source) {
-            article.append($('<a class="fbs-citation">')
-                .attr('href', desc_source)
-                .attr('title', desc_statement || desc_provider)
-                .text('[' + desc_provider + ']'));
-          } else {
-            article.append($('<em class="fbs-citation">')
-                .attr('title', desc_statement || desc_provider)
-                .text('[' + desc_provider + '] '));
-          }
-        }
-        article.append(document.createTextNode(' ' + desc_text));
-        content.append(article);
-      }
-      if (image) {
-        content.children().addClass('fbs-flyout-image-true');
-        content.prepend(
-          $('<img id="fbs-topic-image" class="fbs-flyout-image-true" src="' +
-              image + '">'));
-      }
-      var flyout_types = $('<span class="fbs-flyout-types">')
-        .text(notable_types.slice(0, 3).join(', '));
-      var footer = $('<div class="fbs-attribution">').append(flyout_types);
 
-      return $('<div>')
-          .append(content)
-          .append(footer)
-          .html();
+        }
+
+        if (data['sourceResource']['publisher']) {
+            notable_props.push(['Publisher', data['sourceResource']['publisher'][0]]);
+        }
+
+        if (data['sourceResource']['creator']) {
+            notable_props.push(['Creator', data['sourceResource']['creator'][0]]);
+        }
+
+        //data['_id']
+
+
+
+        descriptions = data['sourceResource']['description'];
+
+        //notable_types.push(['Provider', data['dataProvider'][0]]);
+        //notable_types.push(['URL', data['isShownAt']]);
+        notable_types.push([data['dataProvider'].toString()]);
+
+
+        var content = $('<div class="fbs-flyout-content">');
+        if (name) {
+            content.append($('<h1 id="fbs-flyout-title">').text(name));
+        }
+        content
+            .append($('<h3 class="fbs-topic-properties fbs-flyout-id">')
+                .text(id));
+        notable_props = notable_props.slice(0, 3);
+        $.each(notable_props, function(i, prop) {
+            content.append($('<h3 class="fbs-topic-properties">')
+                .append($('<strong>').text(prop[0] + ': '))
+                .append(document.createTextNode(prop[1])));
+        });
+        if (descriptions) {
+            content.append($('<h3 class="fbs-topic-properties">')
+                .append($('<strong>').text('Description' + ': ')));
+            if(jQuery.type(descriptions) != 'array') {
+                desc_text = data['sourceResource']['description'];
+                var article = $('<p class="fbs-topic-article">');
+
+                article.append(document.createTextNode(' ' + desc_text));
+                content.append(article);
+            }
+            else {
+                for (var i = 0; i < descriptions.length; i++) {
+                    desc_text = data['sourceResource']['description'][i];
+                    var article = $('<p class="fbs-topic-article">');
+
+                    article.append(document.createTextNode(' ' + desc_text));
+                    content.append(article);
+                }
+            }
+
+        }
+        if (image) {
+            content.children().addClass('fbs-flyout-image-true');
+            content.prepend(
+                $('<img id="fbs-topic-image" class="fbs-flyout-image-true" src="' +
+                    image + '">'));
+        }
+
+        /*var flyout_types = $('<div class="fbs-attribution">');
+         notable_types = notable_types.slice(0, 3);
+         $.each(notable_types, function(i, prop) {
+         flyout_types = flyout_types.append($('<h3 class="fbs-flyout-types">')
+         .append($('<strong>').text(prop[0] + ': '))
+         .append(document.createTextNode(prop[1])));
+         });
+
+
+         var footer = flyout_types;*/
+
+        var flyout_types = $('<span class="fbs-flyout-types">')
+            .text(notable_types.slice(0, 3).join(', '));
+        var footer = $('<div class="fbs-attribution">').append(flyout_types);
+
+
+        return $('<div>')
+            .append(content)
+            .append(footer)
+            .html();
     }
   });
 

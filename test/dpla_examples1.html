@@ -1,40 +1,60 @@
-<html> 
+<html>
+<head>
+    <title>Freebase Suggest Example - Basic usage</title>
 
-<link type="text/css" rel="stylesheet" href="../css/suggest.css" />
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
-<script type="text/javascript" src="../js/suggest.js"></script>
+    <link href="http://www.gstatic.com/freebase/suggest/4_1/suggest.min.css" rel="stylesheet" type="text/css">
+    <link href="prettify.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="../js/prettify.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/suggest.js"></script>
 
-  <script>
-    var title = "Find topics of type /film/director (Movie Director)";
-  </script>
-  <head>
-    <title>Freebase Suggest Example - $title</title>
-  </head>
-  <body>
-    <div id="header">
-      <h1>$title</h1>
-    </div>
-    <div id="body">
-      <p><strong>Try it out:</strong></p>
-      <input type="text" id="myinput"/>
-      <script type="text/javascript">
-      $(function() {
-        $("#myinput").suggest({
-          key:"AIzaSyBBJoStIWMWfWkgHIoRtLCCAg8B4ay2Vk8",
-          filter:'(all type:/film/director)'
-        });
-      });
-      </script>
-      <p><strong>Code:</strong>
-      <pre class="prettyprint">$(function() {
-  $("#myinput").suggest({
-    key: "YOUR-API-KEY-GOES-HERE",
-    filter:'(all type:/film/director)'
-  });
+    <style>
+        body {
+            font-family: Arial;
+        }
+        h1 {
+            font-size: 1.7em;
+        }
+        pre.prettyprint {
+            padding: 16px;
+            background: #eee;
+            min-width: 600px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body onload="prettyPrint()">
+<div id="header">
+    <h1>Basic usage</h1>
+</div>
+<div id="body">
+    <p><strong>Try it out:</strong></p>
+    <input id="myinput" type="text">
+    <script type="text/javascript">
+        $("#myinput")
+                .suggest({"api_key": "8f0de09d287758110146743c69e8ddda"})
+                .bind("fb-select", function(e, data) {
+                    window.open(data.isShownAt, '_blank');
+                });
+    </script>
+    <p><strong>Code:</strong>
+      <pre class="prettyprint">$("#myinput")
+ .suggest("api_key": "YOUR-API-KEY-GOES-HERE")
+ .bind("fb-select", function(e, data) {
+   window.open(data.isShownAt, '_blank');
+   //To use same window, do window.open(data.isShownAt, '_self');
 });</pre></p>
+</div>
+<div id="footer">
+    <div class="freebase-attribution">
+
+        <div style="font-size: x-small; margin-left: 70px;">
+            Original Source:
+            <a href="http://www.freebase.com/">Freebase</a>, licensed under
+            <a href="http://creativecommons.org/licenses/by/2.5/">CC-BY</a><br/>
+            <a href="">View the source</a> of this app
+        </div>
     </div>
-    <div id="footer">
-      
-    </div>
-  </body>
-</html>
+</div>
+
+</body></html>
