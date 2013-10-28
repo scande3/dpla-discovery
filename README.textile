@@ -1,7 +1,7 @@
 h1. DPLA Discovery
 
 DPLA Discovery is a javascript interface to allow for local website presentation of "http://dp.la":dp.la content.
-In the current 0.01 release, all that is given is a bare-bones search box with only a
+In the current 0.0.1 release, all that is given is a bare-bones search box with only a
 handful of options. Future versions are expected to include more advance searching/filtering
 and allow for a type of recommendation system without the need for the search box.
 
@@ -14,6 +14,11 @@ h3. Step 1A - Local:
 2. Place the JS and CSS files somewhere on your server to link to.
 
 3. Add the following to your file updating the script references:
+```
+<link href="suggest.css" rel="stylesheet" type="text/css>
+<script src="pretty.js"></script>
+```
+
 
 ```
  &lt;link href="suggest.css" rel="stylesheet" type="text/css"&gt;
