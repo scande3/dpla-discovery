@@ -63,7 +63,7 @@ Adding soon.
 
 h2. Known Alpha Bugs
 
-* Clicking on a record causes the previous typed text to be lost.
+* Basic "Show More" functionality implemented. Still a tad buggy but works in the most basic case.
 
 h2. Contributing/Suggestions
 

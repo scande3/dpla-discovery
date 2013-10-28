@@ -92,7 +92,7 @@
    * to the search service as specified by service_url + service_path
    */
   var SEARCH_PARAMS = {
-      api_key:1, page_size:1, dataProvider:1 //  Add any other DPLA search params here
+      api_key:1, page_size:1, dataProvider:1, page:1 //  Add any other DPLA search params here
   };
 
   $.suggest = function(name, prototype) {
@@ -363,8 +363,9 @@
     // override to be notified on focus and input has a value
     focus_hook: function(e) {
       //console.log("focus_hook", this.input.data("data.suggest"));
-      if (!this.input.data("data.suggest") &&
-          !this.pane.is(":visible") &&
+
+      //REMOVED THIS CONDITION: !this.input.data("data.suggest") &&
+      if (!this.pane.is(":visible") &&
           $("." + this.options.css.item, this.list).length) {
         this.position();
         this.pane_show();
@@ -868,9 +869,12 @@
     onselect: function($selected, focus) {
       var data = $selected.data("data.suggest");
       if (data) {
-        this.input.val(data.name)
+          //NOTE: Used to put selected value in box. Now doesn't.
+          this.input.data("data.suggest", data)
+              .trigger("fb-select", data);
+        /*this.input.val(data.sourceResource.title.toString())
           .data("data.suggest", data)
-          .trigger("fb-select", data);
+          .trigger("fb-select", data);*/
 
         this.trackEvent(this.name, "fb-select", "index",
         $selected.prevAll().length);
@@ -1138,7 +1142,7 @@
       this.input.trigger("fb-flyoutpane-hide", this);
     },
 
-    request: function(val, cursor) {
+    request: function(val, page) {
       var self = this,
           o = this.options;
 
@@ -1170,9 +1174,8 @@
       var data = {};
       data[o.query_param_name] = query;
 
-      // TODO: pagination done differently for DPLA
-      if (cursor) {
-        data.cursor = cursor;
+      if (page) {
+        data.page = page;
       }
       $.extend(data, o.ac_param, extend_ac_param);
       if (filter.length) {
@@ -1182,7 +1185,7 @@
       var url = o.service_url + o.service_path + "?" + $.param(data, true);
       var cached = $.suggest.cache[url];
       if (cached) {
-        this.response(cached, cursor ? cursor : -1, true);
+        this.response(cached, page ? page : 1, true);
         return;
       }
 
@@ -1213,7 +1216,7 @@
 
           $.suggest.cache[url] = data;
           data.prefix = val;  // keep track of prefix to match up response with input value
-          self.response(data, cursor ? cursor : -1);
+          self.response(data, page ? page : 1);
           
         },
         error: function(xhr) {
@@ -1305,11 +1308,11 @@
       return response_data.prefix === this.input.val();
     },
 
-    response_hook: function(response_data, cursor) {
+    response_hook: function(response_data, page) {
       if (this.flyoutpane) {
         this.flyoutpane.hide();
       }
-      if (cursor > 0) {
+      if (page > 1) {
         $(".fbs-more", this.pane).remove();
       }
       else {
@@ -1318,14 +1321,14 @@
       }
     },
 
-    show_hook: function(response_data, cursor, first) {
+    show_hook: function(response_data, page, first) {
       base.show_hook.apply(this, [response_data]);
 
       var o = this.options,
           self = this,
           p = this.pane,
           l = this.list,
-          result = response_data.result,
+          result = response_data.docs,
           more = $(".fbs-more", p),
           suggestnew = $(".fbs-suggestnew", p),
           status = $(".fbs-status", p);
@@ -1347,7 +1350,10 @@
       }
 
       // more
-      if (result && result.length && "cursor" in response_data) {
+        //o.page_size
+       //alert(page);
+      if (result && result.length && "count" in response_data && (o.page_size*page < response_data.count)) {
+
         if (!more.length) {
           var more_link = $('<a class="fbs-more-link" href="#" title="(Ctrl+m)">view more</a>');
           more = $('<div class="fbs-more">').append(more_link);
@@ -1355,11 +1361,12 @@
             e.preventDefault();
             e.stopPropagation();
             var m = $(this).parent(".fbs-more");
-            self.more(m.data("cursor.suggest"));
+            self.more(m.data("page.suggest"));
           });
           l.after(more);
         }
-        more.data("cursor.suggest", response_data.cursor);
+          //response_data.cursor
+        more.data("page.suggest", page+1);
         more.show();
       }
       else {
@@ -1367,7 +1374,7 @@
       }
 
       // suggest_new
-      if (o.suggest_new) {
+      /*if (o.suggest_new) {
         if (!suggestnew.length) {
           // create suggestnew option
           var button = $('<button class="fbs-suggestnew-button">');
@@ -1386,10 +1393,10 @@
       }
       else {
         suggestnew.remove();
-      }
+      }*/
 
       // scroll to first if clicked on "more"
-      if (first && first.length && cursor > 0) {
+      if (first && first.length && page > 1) {
         var top = first.prevAll().length * first.outerHeight();
         var scrollTop = l.scrollTop();
         l.animate({scrollTop: top}, "slow", function() {
@@ -1411,14 +1418,14 @@
       this.hide_all();
     },
 
-    more: function(cursor) {
-      if (cursor) {
+    more: function(page) {
+      if (page && page > 1) {
         var orig = this.input.data("original.suggest");
         if (orig !== null) {
           this.input.val(orig);
         }
-        this.request(this.input.val(), cursor);
-        this.trackEvent(this.name, "more", "cursor", cursor);
+        this.request(this.input.val(), page);
+        this.trackEvent(this.name, "more", "page", page);
       }
       return false;
     },
