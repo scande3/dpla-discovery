@@ -72,7 +72,7 @@ Steven Anderson (sanderson@bpl.org)
   <body>
     <h1>DPLA Suggest</h1>
     <p>
-      DPLA Suggest is a jQuery plugin that adds DPLA Search  autocomplete to search boxes on your site. Start typing text and the widget suggests relevant matches from the millions of records in DPLA. (In the future you will be able search subset of types.) Topic flyouts help the user select the correct item which is uniquely identified with a DPLA id.
+      DPLA Suggest is a jQuery plugin that adds DPLA Search autocomplete to search boxes on your site. Start typing text and the widget suggests relevant matches from the millions of records in DPLA. (In the future you will be able search subset of types.) Topic flyouts help the user select the correct item.
     </p>
 
     <p>
@@ -124,6 +124,43 @@ Steven Anderson (sanderson@bpl.org)
             This is the API Key for your DPLA requests. To get one, please visit: <a href='http://dp.la/info/developers/codex/policies/#get-a-key'>http://dp.la/info/developers/codex/policies/#get-a-key</a>
           </td>
         </tr>
+          <tr>
+              <td>
+                  <code>page_size</code>
+              </td>
+              <td>
+                  String
+              </td>
+              <td>
+                  <b>Default: </b>35
+              </td>
+          </tr>
+          <tr>
+              <td colspan="3">
+                  The number of records to attempt to return in the search result.
+              </td>
+          </tr>
+          </tr>
+          <tr>
+              <td>
+                  <code>dataProvider</code>
+              </td>
+              <td>
+                  String
+              </td>
+              <td>
+                  <b>Default: </b>null
+              </td>
+          </tr>
+          <tr>
+              <td colspan="3">
+                  Limit results to a specific institution. For example,
+                  $("#mySearchBox").suggest({
+                  api_key: "your DPLA key",
+                  dataProvider: "University of California"
+                  })
+              </td>
+          </tr>
      </table>
 
 

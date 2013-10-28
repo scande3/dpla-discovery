@@ -92,7 +92,7 @@
    * to the search service as specified by service_url + service_path
    */
   var SEARCH_PARAMS = {
-      api_key:1 //  Add any other DPLA search params here
+      api_key:1, page_size:1, dataProvider:1 //  Add any other DPLA search params here
   };
 
   $.suggest = function(name, prototype) {
@@ -1693,7 +1693,12 @@
 
       // the delay before sending off the ajax request to the
       // suggest and flyout service
-      xhr_delay: 200
+      xhr_delay: 200,
+
+      //Number of results to return
+      page_size: 35,
+
+      dataProvider: null
     },
 
     /**
@@ -1854,18 +1859,36 @@
         }
 
         if (data['sourceResource']['subject']) {
-            for (var i = 0; i < data['sourceResource']['subject'].length; i++) {
-                notable_props.push(['Subject', data['sourceResource']['subject'][i]['name']]);
+            if(jQuery.type(data['sourceResource']['subject']) != 'array') {
+                notable_props.push(['Subject', data['sourceResource']['subject']]);
             }
+            else {
+                for (var i = 0; i < data['sourceResource']['subject'].length; i++) {
+                    notable_props.push(['Subject', data['sourceResource']['subject'][i]['name']]);
+                }
+            }
+
 
         }
 
         if (data['sourceResource']['publisher']) {
-            notable_props.push(['Publisher', data['sourceResource']['publisher'][0]]);
+            if(jQuery.type(data['sourceResource']['publisher']) != 'array') {
+                notable_props.push(['Publisher', data['sourceResource']['publisher']]);
+            }
+            else {
+                notable_props.push(['Publisher', data['sourceResource']['publisher'][0]]);
+            }
+
         }
 
         if (data['sourceResource']['creator']) {
-            notable_props.push(['Creator', data['sourceResource']['creator'][0]]);
+            if(jQuery.type(data['sourceResource']['creator']) != 'array') {
+                notable_props.push(['Creator', data['sourceResource']['creator']]);
+            }
+            else {
+                notable_props.push(['Creator', data['sourceResource']['creator'][0]]);
+            }
+
         }
 
         //data['_id']
@@ -1916,7 +1939,7 @@
         if (image) {
             content.children().addClass('fbs-flyout-image-true');
             content.prepend(
-                $('<img id="fbs-topic-image" class="fbs-flyout-image-true" src="' +
+                $('<img id="fbs-topic-image" class="fbs-flyout-image-true" style="max-width:75px;" src="' +
                     image + '">'));
         }
 

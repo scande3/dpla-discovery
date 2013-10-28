@@ -1,6 +1,80 @@
-NOTE: Not working fully yet. Expected to work Monday.
+h1. DPLA Discovery
 
-API key: 8f0de09d287758110146743c69e8ddda
+DPLA Discovery is a javascript interface to allow for local website presentation of "http://dp.la":dp.la content.
+In the current 0.01 release, all that is given is a bare-bones search box with only a
+handful of options. Future versions are expected to include more advance searching/filtering
+and allow for a type of recommendation system without the need for the search box.
+
+h2. Installation/Setup
+
+h3. Step 1A - Local:
+
+1. Clone this repository.
+
+2. Place the JS and CSS files somewhere on your server to link to.
+
+3. Add the following to your file updating the script references:
+
+```
+ &lt;link href="suggest.css" rel="stylesheet" type="text/css"&gt;
+ &lt;link href="pretty.css" rel="stylesheet" type="text/css"&gt;
+ &lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"&gt;&lt;/script&gt;
+ &lt;script src="suggest.js"&gt;&lt;/script&gt;
+ &lt;script src="pretty.js"&gt;&lt;/script&gt;
+
+```
+
+h3. Step 1B - Linked (urls should resolve on Monday, evaluation purposes only!):
+
+Add the following to a file:
+
+```
+ &lt;link href="http://static.digitalcommonwealth.org/dpla-discovery/js/suggest.css" rel="stylesheet" type="text/css"&gt;
+ &lt;link href="http://static.digitalcommonwealth.org/dpla-discovery/js/pretty.css" rel="stylesheet" type="text/css"&gt;
+ &lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"&gt;&lt;/script&gt;
+ &lt;script src="http://static.digitalcommonwealth.org/dpla-discovery/js/suggest.js"&gt;&lt;/script&gt;
+ &lt;script src="http://static.digitalcommonwealth.org/dpla-discovery/js/pretty.js"&gt;&lt;/script&gt;
+
+```
+
+h3. Step 2:
+
+Add the following snippet of code referring to your search box:
+
+```
+&lt;script&gt;
+    $(function() {
+      $("#mySearchBox").suggest({
+        api_key: "your DPLA key"
+      })
+      .bind("fb-select", function(e, data) {
+         window.open(data.isShownAt, '_blank');
+         //To use same window, do window.open(data.isShownAt, '_self');
+      });
+    });
+&lt;/script&gt;
+```
+
+h3. Options and Examples
+
+For options (such as page size adjustment or limiting to your institution)
+and further examples, please see the index.html file along with files under the "test" directory.
+
+h2. Screenshots
+
+Adding soon.
+
+h2. Known Alpha Bugs
+
+* Clicking on a record causes the previous typed text to be lost.
+
+h2. Contributing/Suggestions
+
+More coming soon! For now, feel free to fork and submit improvements. In addition, feel
+free to contact me with what might make this usable for your institute at
+sanderson@bpl.org.
+
+h2. Acknowledgements
 
 Based on: https://developers.google.com/freebase/v1/search-widget
 (Example: http://suggest-examples.freebaseapps.com/example1)
