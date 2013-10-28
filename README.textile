@@ -7,7 +7,7 @@ and allow for a type of recommendation system without the need for the search bo
 
 h2. Example Site (temporary)
 
-"http://www.phdgaming.com/dpla":http://www.phdgaming.com/dpla
+"http://static.digitalcommonwealth.org/dpla-discovery":http://static.digitalcommonwealth.org/dpla-discovery
 
 h2. Installation/Setup
 
@@ -18,23 +18,24 @@ h3. Step 1A - Local:
 2. Place the JS and CSS files somewhere on your server to link to.
 
 3. Add the following to your file updating the script references:
-
+<pre>
  &lt;link href="suggest.css" rel="stylesheet" type="text/css"&gt;
  &lt;link href="pretty.css" rel="stylesheet" type="text/css"&gt;
  &lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"&gt;&lt;/script&gt;
  &lt;script src="suggest.js"&gt;&lt;/script&gt;
  &lt;script src="pretty.js"&gt;&lt;/script&gt;
+</pre>
 
 h3. Step 1B - Linked (urls should resolve on Monday, evaluation purposes only!):
 
 Add the following to a file:
-
+<pre>
  &lt;link href="http://static.digitalcommonwealth.org/dpla-discovery/js/suggest.css" rel="stylesheet" type="text/css"&gt;
  &lt;link href="http://static.digitalcommonwealth.org/dpla-discovery/js/pretty.css" rel="stylesheet" type="text/css"&gt;
  &lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"&gt;&lt;/script&gt;
  &lt;script src="http://static.digitalcommonwealth.org/dpla-discovery/js/suggest.js"&gt;&lt;/script&gt;
  &lt;script src="http://static.digitalcommonwealth.org/dpla-discovery/js/pretty.js"&gt;&lt;/script&gt;
-
+</pre>
 
 h3. Step 2:
 
