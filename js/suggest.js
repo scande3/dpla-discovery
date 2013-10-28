@@ -1703,7 +1703,7 @@
       xhr_delay: 200,
 
       //Number of results to return
-      page_size: 35,
+      page_size: 25,
 
       dataProvider: null
     },
@@ -1906,6 +1906,7 @@
 
         //notable_types.push(['Provider', data['dataProvider'][0]]);
         //notable_types.push(['URL', data['isShownAt']]);
+        //notable_types.push([data['dataProvider'].toString() + ' (' + data._id + ')']);
         notable_types.push([data['dataProvider'].toString()]);
 
 
