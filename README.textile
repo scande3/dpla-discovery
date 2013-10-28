@@ -5,6 +5,10 @@ In the current 0.0.1 release, all that is given is a bare-bones search box with 
 handful of options. Future versions are expected to include more advance searching/filtering
 and allow for a type of recommendation system without the need for the search box.
 
+h2. Example Site (note: will move this to a more suitable place soon)
+
+"http://www.phdgaming.com/dpla":http://www.phdgaming.com/dpla
+
 h2. Installation/Setup
 
 h3. Step 1A - Local:
@@ -14,39 +18,28 @@ h3. Step 1A - Local:
 2. Place the JS and CSS files somewhere on your server to link to.
 
 3. Add the following to your file updating the script references:
-```
-<link href="suggest.css" rel="stylesheet" type="text/css>
-<script src="pretty.js"></script>
-```
 
-
-```
  &lt;link href="suggest.css" rel="stylesheet" type="text/css"&gt;
  &lt;link href="pretty.css" rel="stylesheet" type="text/css"&gt;
  &lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"&gt;&lt;/script&gt;
  &lt;script src="suggest.js"&gt;&lt;/script&gt;
  &lt;script src="pretty.js"&gt;&lt;/script&gt;
 
-```
-
 h3. Step 1B - Linked (urls should resolve on Monday, evaluation purposes only!):
 
 Add the following to a file:
 
-```
  &lt;link href="http://static.digitalcommonwealth.org/dpla-discovery/js/suggest.css" rel="stylesheet" type="text/css"&gt;
  &lt;link href="http://static.digitalcommonwealth.org/dpla-discovery/js/pretty.css" rel="stylesheet" type="text/css"&gt;
  &lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"&gt;&lt;/script&gt;
  &lt;script src="http://static.digitalcommonwealth.org/dpla-discovery/js/suggest.js"&gt;&lt;/script&gt;
  &lt;script src="http://static.digitalcommonwealth.org/dpla-discovery/js/pretty.js"&gt;&lt;/script&gt;
 
-```
 
 h3. Step 2:
 
 Add the following snippet of code referring to your search box:
 
-```
 &lt;script&gt;
     $(function() {
       $("#mySearchBox").suggest({
@@ -58,7 +51,6 @@ Add the following snippet of code referring to your search box:
       });
     });
 &lt;/script&gt;
-```
 
 h3. Options and Examples
 
