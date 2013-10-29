@@ -53,6 +53,18 @@ Add the following snippet of code referring to your search box:
     });
 &lt;/script&gt;
 
+h3. Step 3 (Accessibility Fallback Support)
+
+Setup your page something like the following:
+<pre>
+<form method="get" action="http://dp.la/search">
+  <input type="text" name="q" id="id you put in your Javascript" />
+  <noscript><input type="submit" name="submit" /></noscript>
+</form>
+</pre>
+
+To be fu
+
 h3. Options and Examples
 
 For options (such as page size adjustment or limiting to your institution)

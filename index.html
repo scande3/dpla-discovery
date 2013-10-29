@@ -75,9 +75,13 @@ Steven Anderson (sanderson@bpl.org)
       DPLA Suggest is a jQuery plugin that adds DPLA Search autocomplete to search boxes on your site. Start typing text and the widget suggests relevant matches from the millions of records in DPLA. (In the future you will be able search subset of types.) Topic flyouts help the user select the correct item.
     </p>
 
+    <form method="get" action="http://dp.la/search">
     <p>
-      <label for="try"><b>Try it out</b>:  start typing here:<input type="text" id="try"></label>
+      <label for="try"><b>Try it out</b>:  start typing here:<input type="text" id="try" name="q">
+         <noscript><input type="submit" name="submit" /></noscript>
+      </label>
     </p>
+    </form>
 
     <p>
       <h2>Add to your site</h2>
