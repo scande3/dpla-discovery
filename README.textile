@@ -62,7 +62,7 @@ Setup your page something like the following:
   &lt;input type="text" name="q" id="id you put in your Javascript" /&gt;
   &lt;noscript&gt;&lt;input type="submit" name="submit" /&gt;&lt;/noscript&gt;
 &lt;/form>
-&lt;/pre>
+</pre>
 
 h3. Options and Examples
 
