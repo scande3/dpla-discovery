@@ -56,14 +56,13 @@ Add the following snippet of code referring to your search box:
 h3. Step 3 (Accessibility Fallback Support)
 
 Setup your page something like the following:
-<pre>
-<form method="get" action="http://dp.la/search">
-  <input type="text" name="q" id="id you put in your Javascript" />
-  <noscript><input type="submit" name="submit" /></noscript>
-</form>
-</pre>
 
-To be fu
+<pre>
+&lt;form method="get" action="http://dp.la/search"&gt;
+  &lt;input type="text" name="q" id="id you put in your Javascript" /&gt;
+  &lt;noscript&gt;&lt;input type="submit" name="submit" /&gt;&lt;/noscript&gt;
+&lt;/form>
+&lt;/pre>
 
 h3. Options and Examples
 
