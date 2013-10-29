@@ -41,6 +41,7 @@ h3. Step 2:
 
 Add the following snippet of code referring to your search box:
 
+<pre>
 &lt;script&gt;
     $(function() {
       $("#mySearchBox").suggest({
@@ -52,6 +53,7 @@ Add the following snippet of code referring to your search box:
       });
     });
 &lt;/script&gt;
+</pre>
 
 h3. Step 3 (Accessibility Fallback Support)
 
@@ -61,7 +63,7 @@ Setup your page something like the following:
 &lt;form method="get" action="http://dp.la/search"&gt;
   &lt;input type="text" name="q" id="id you put in your Javascript" /&gt;
   &lt;noscript&gt;&lt;input type="submit" name="submit" /&gt;&lt;/noscript&gt;
-&lt;/form>
+&lt;/form&gt;
 </pre>
 
 h3. Options and Examples
