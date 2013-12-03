@@ -87,6 +87,8 @@ sanderson@bpl.org.
 
 h2. Acknowledgements
 
+Contributors are located in the file CONTRIBUTORS.md
+
 Based on: https://developers.google.com/freebase/v1/search-widget
 (Example: http://suggest-examples.freebaseapps.com/example1)
 

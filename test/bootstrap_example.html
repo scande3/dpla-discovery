@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+    <title>DPLA Discovery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Jquery -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+
+
+    <!-- DPLA Discovery files -->
+    <link href="../css/prettify.css" rel="stylesheet" type="text/css">
+    <link href="../css/suggest.css" rel="stylesheet" type="text/css">
+    <script src="../js/suggest.js"></script>
+    <script src="../js/prettify.js"></script>
+
+    <!-- DPLA Discovery initialization -->
+    <script>
+        $(function() {
+            $("#try").suggest({
+                api_key: "8f0de09d287758110146743c69e8ddda"
+            })
+                    .bind("fb-select", function(e, data) {
+                        window.open(data.isShownAt, '_blank');
+                    });
+
+            prettyPrint();
+        });
+    </script>
+</head>
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">DPLA Discovery</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form class="navbar-form navbar-right">
+                <button type="button" class="btn btn-success" onClick="location.href='https://github.com/scande3/dpla-discovery'">Get Source / Documentation</button>
+                <button type="button" class="btn btn-info" onClick="location.href='https://github.com/scande3/dpla-discovery/blob/master/CONTRIBUTORS.md'">Contributors</button>
+            </form>
+        </div><!--/.navbar-collapse -->
+    </div>
+</div>
+
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+    <div class="container">
+        <form class="navbar-form navbar-center" method="get" action="http://dp.la/search">
+            <p>
+                <div class="form-group">
+
+                    <label for="try"><strong>Try out the search bar by typing here:</strong></label><br />
+                    <input type="text" id="try" name="q" class="form-control" style="width:325px;">
+                    <noscript><input type="submit" name="submit" class="btn btn-primary" /></noscript>
+                </div>
+            </p>
+        </form>
+    </div>
+</div>
+
+
+</body>
+</html>
