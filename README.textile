@@ -11,38 +11,39 @@ h2. Example Site (temporary)
 
 h2. Installation/Setup
 
-h3. Step 1A - Local:
+h3. Step 1 - Request a DPLA API Key
+
+Please follow the instructions to "request a DPLA API key,":http://dp.la/info/developers/codex/policies/ which you'll need for step 3.
+
+h3. Step 2A - Local:
 
 1. Clone this repository.
 
 2. Place the JS and CSS files somewhere on your server to link to.
 
 3. Add the following to your file updating the script references:
-<pre>
- &lt;link href="suggest.css" rel="stylesheet" type="text/css"&gt;
- &lt;link href="pretty.css" rel="stylesheet" type="text/css"&gt;
- &lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"&gt;&lt;/script&gt;
- &lt;script src="suggest.js"&gt;&lt;/script&gt;
- &lt;script src="pretty.js"&gt;&lt;/script&gt;
-</pre>
 
-h3. Step 1B - Linked (urls should resolve on Monday, evaluation purposes only!):
+bc.  <link href="suggest.css" rel="stylesheet" type="text/css">
+ <link href="pretty.css" rel="stylesheet" type="text/css">
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+ <script src="suggest.js"></script>
+ <script src="pretty.js"></script>
+
+h3. Step 2B - Linked (evaluation purposes only!):
 
 Add the following to a file:
-<pre>
- &lt;link href="http://static.digitalcommonwealth.org/dpla-discovery/js/suggest.css" rel="stylesheet" type="text/css"&gt;
- &lt;link href="http://static.digitalcommonwealth.org/dpla-discovery/js/pretty.css" rel="stylesheet" type="text/css"&gt;
- &lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"&gt;&lt;/script&gt;
- &lt;script src="http://static.digitalcommonwealth.org/dpla-discovery/js/suggest.js"&gt;&lt;/script&gt;
- &lt;script src="http://static.digitalcommonwealth.org/dpla-discovery/js/pretty.js"&gt;&lt;/script&gt;
-</pre>
 
-h3. Step 2:
+bc.  <link href="http://static.digitalcommonwealth.org/dpla-discovery/js/suggest.css" rel="stylesheet" type="text/css">
+ <link href="http://static.digitalcommonwealth.org/dpla-discovery/js/pretty.css" rel="stylesheet" type="text/css">
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+ <script src="http://static.digitalcommonwealth.org/dpla-discovery/js/suggest.js"></script>
+ <script src="http://static.digitalcommonwealth.org/dpla-discovery/js/pretty.js"></script>
 
-Add the following snippet of code referring to your search box:
+h3. Step 3:
 
-<pre>
-&lt;script&gt;
+Add the following snippet of code referring to your search box. Insert the API key you received in Step 1 between quotes in place of @your DPLA key@.
+
+bc.  <script>
     $(function() {
       $("#mySearchBox").suggest({
         api_key: "your DPLA key"
@@ -52,19 +53,17 @@ Add the following snippet of code referring to your search box:
          //To use same window, do window.open(data.isShownAt, '_self');
       });
     });
-&lt;/script&gt;
-</pre>
+ </script>
 
-h3. Step 3 (Accessibility Fallback Support)
+h3. Step 4 (Accessibility Fallback Support)
 
 Setup your page something like the following:
 
-<pre>
-&lt;form method="get" action="http://dp.la/search"&gt;
-  &lt;input type="text" name="q" id="id you put in your Javascript" /&gt;
-  &lt;noscript&gt;&lt;input type="submit" name="submit" /&gt;&lt;/noscript&gt;
-&lt;/form&gt;
-</pre>
+bc.  <form method="get" action="http://dp.la/search">
+   <input type="text" name="q" id="mySearchBox" />
+   <noscript><input type="submit" name="submit" /></noscript>
+ </form>
+
 
 h3. Options and Examples
 
