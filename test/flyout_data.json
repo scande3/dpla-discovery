@@ -1,0 +1,27 @@
+[
+    {
+        "MyListName": "My List",
+        "listID": 180179,
+        "Datasource": "ipacadmin",
+        "UpdateDate": "December, 30 2013 00:00:00",
+        "Entries": [
+            3192744,
+            3192744,
+            4268762,
+            3468744,
+            4900433,
+            4830295,
+            4937016,
+            4413170
+        ]
+    },
+    {
+        "MyListName": "nonfiction",
+        "listID": 178777,
+        "Datasource": "ipacadmin",
+        "UpdateDate": "June, 19 2013 00:00:00",
+        "Entries": [
+            905689
+        ]
+    }
+]

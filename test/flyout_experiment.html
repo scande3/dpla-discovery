@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<!-- This DOCTYPE is important. If left out, may need to set the min-height on the caret, see:
+https://github.com/twbs/bootstrap/issues/1962 -->
+
+<html lang="en">
+<head>
+
+<!-- Jquery -->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" />
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css" />
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
+    <!-- From  http://ugate.wordpress.com/2013/06/28/scrollable-twitter-bootstrap-menus/ -->
+    <style>
+        ul.scroll-menu {
+            position: absolute;
+
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            -moz-overflow-scrolling: touch;
+            -ms-overflow-scrolling: touch;
+            -o-overflow-scrolling: touch;
+            overflow-scrolling: touch;
+            top: 0 !important;
+            left: 0 !important;
+            height: auto;
+            max-height: 200px;
+            margin: 2.6em 0;
+
+            /* UNUSED MODIFICATIONS (DELETE ME)
+            width: 100%;
+            display: inherit !important;
+            border-left: none;
+            border-right: none;
+            -webkit-border-radius: 0 !important;
+            -moz-border-radius: 0 !important;
+            -ms-border-radius: 0 !important;
+            -o-border-radius: 0 !important;
+            border-radius: 0 !important;
+
+             -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            -ms-box-shadow: none;
+            -o-box-shadow: none;
+            box-shadow: none;
+            */
+        }
+    </style>
+
+    <noscript>
+    <style>
+        ul.scroll-menu {
+        display: inherit !important;
+            /* More Styling Here */
+        }
+    </style>
+    </noscript>
+
+    </head>
+<body>
+
+
+<div class="btn-toolbar" style="margin-left:200px;">
+
+    <div class="btn-group add_book_to_list" data-identifier='5'>
+        <button class="btn btn-default">Some information here</button>
+        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <ul class="dropdown-menu scroll-menu folder-options">
+            <noscript>
+                <li><a href="AddList.html">Coldfusion Generated List A</a></li>
+                <li><a href="AddList.html">Coldfusion Generated List B</a></li>
+                <li class="divider"></li>
+                <li><a href="CreateNewFolder.html">Create New Folder</a></li>
+            </noscript>
+        </ul>
+    </div><!-- /btn-group -->
+ </div>
+
+<div class="btn-toolbar" style="margin-left:200px;margin-top:100px;">
+
+    <div class="btn-group add_book_to_list" data-identifier='6'>
+        <button class="btn btn-default">Some information here</button>
+
+        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="submit"><span class="caret"></span></button>
+
+        <ul class="dropdown-menu scroll-menu">
+        <noscript>
+            <li><a href="AddList.html">Coldfusion Generated List A</a></li>
+            <li><a href="AddList.html">Coldfusion Generated List B</a></li>
+            <li class="divider"></li>
+            <li><a href="CreateNewFolder.html">Create New Folder</a></li>
+        </noscript>
+        </ul>
+    </div><!-- /btn-group -->
+</div>
+
+<script>
+
+    //Placeholder example of adding an item to a list
+    function AddToList(book_id, list_id) {
+        alert('Adding book id ' + book_id + ' to the list with id ' + list_id);
+        return false;
+    }
+
+    $(document).ready(function() {
+
+        //For each book...
+        $('.add_book_to_list').each(function(){
+
+            //Set the object dom for the following to a variable
+            var self = $(this);
+
+            //For that object dome, listen to the following event (bootstrap specific)
+            self.on('show.bs.dropdown', function () {
+
+                //Let the user know loading is happening... prototype styling
+                self.find('ul').html('<li><center>Loading folders...</center></li>');
+
+                //Make the JSON call... as you plan to allow creating of new folders, hard to cache... but possible
+                var myURL = "flyout_data.json";
+                $.getJSON( myURL, function( json_response ) {
+
+                    options = ''
+
+                    //Loop over the JSON response pairs...
+                    $(json_response).each(function(idx, json_obj){
+
+                        //To see all keys, uncomment the below
+                        /*$.each(json_obj, function(key, value){
+                         console.log(key + ": " + value);
+                         });*/
+
+                        //This is horrible but quick... use better DOM manipulation
+                        options = options + '<li><a href="#" onClick="return AddToList(\'' + self.attr('data-identifier') + '\', \'' + json_obj.listID + '\')">';
+                        options = options + json_obj.MyListName;
+                        options = options + '</a></li>';
+
+                    });
+
+                    //Add the option for doing a new folder and code for that...
+                    options = options + '<li class="divider"></li>'
+                    options = options + '<li><a href="#">Create New Folder</a></li>'
+
+                    //From the top level dom, find the list, and insert the new options...
+                    self.find('ul').html(options);
+
+                });
+            });
+
+        });
+
+    });
+
+</script>
+
+
+</body>
+</html>
+
