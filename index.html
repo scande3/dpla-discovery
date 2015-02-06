@@ -62,7 +62,7 @@ Steven Anderson (sanderson@bpl.org)
 	        api_key: "8f0de09d287758110146743c69e8ddda"
           })
           .bind("fb-select", function(e, data) {
-            window.open(data.isShownAt, '_blank');
+            window.open("http://dp.la/item/" + data.id, '_blank');
           });
 
           prettyPrint();
@@ -95,8 +95,8 @@ Steven Anderson (sanderson@bpl.org)
         api_key: "your DPLA key"
       })
       .bind("fb-select", function(e, data) {
-         window.open(data.isShownAt, '_blank');
-         //To use same window, do window.open(data.isShownAt, '_self');
+         window.open("http://dp.la/item/" + data.id, '_blank');
+         //To use same window, do window.open("http://dp.la/item/" + data.id, '_blank');
       });
     });
 &lt;/script&gt;

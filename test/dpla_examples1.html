@@ -34,15 +34,15 @@
         $("#myinput")
                 .suggest({"api_key": "8f0de09d287758110146743c69e8ddda"})
                 .bind("fb-select", function(e, data) {
-                    window.open(data.isShownAt, '_blank');
+                    window.open("http://dp.la/item/" + data.id, '_blank');
                 });
     </script>
     <p><strong>Code:</strong>
       <pre class="prettyprint">$("#myinput")
  .suggest("api_key": "YOUR-API-KEY-GOES-HERE")
  .bind("fb-select", function(e, data) {
-   window.open(data.isShownAt, '_blank');
-   //To use same window, do window.open(data.isShownAt, '_self');
+   window.open("http://dp.la/item/" + data.id, '_blank');
+   //To use same window, do window.open("http://dp.la/item/" + data.id, '_self');
 });</pre></p>
 </div>
 <div id="footer">
