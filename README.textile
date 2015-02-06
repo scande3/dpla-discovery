@@ -1,6 +1,7 @@
 h1. DPLA Discovery
 
-DPLA Discovery is a javascript interface to allow for local website presentation of "http://dp.la":dp.la content.
+DPLA Discovery is a javascript interface to allow for local website presentation of "Digital Public Library of America":http://dp.la content.
+
 In the current 0.0.1 release, all that is given is a bare-bones search box with only a
 handful of options. Future versions are expected to include more advance searching/filtering
 and allow for a type of recommendation system without the need for the search box.
