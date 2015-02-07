@@ -1,4 +1,4 @@
-<!!--
+<!--
  Copyright 2012, Google Inc.
  All rights reserved.
 
@@ -29,10 +29,10 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  !!-->
 
-<!!--
+<!--
 Modified to search DPLA by:
 Steven Anderson (sanderson@bpl.org)
-!!-->
+-->
 <html>
   <head>
     <title>DPLA Suggest</title>
@@ -62,7 +62,7 @@ Steven Anderson (sanderson@bpl.org)
 	        api_key: "8f0de09d287758110146743c69e8ddda"
           })
           .bind("fb-select", function(e, data) {
-            window.open(data.isShownAt, '_blank');
+            window.open("http://dp.la/item/" + data.id, '_blank');
           });
 
           prettyPrint();
@@ -72,7 +72,7 @@ Steven Anderson (sanderson@bpl.org)
   <body>
     <h1>DPLA Suggest</h1>
     <p>
-      DPLA Suggest is a jQuery plugin that adds DPLA Search autocomplete to search boxes on your site. Start typing text and the widget suggests relevant matches from the millions of records in DPLA. (In the future you will be able search subset of types.) Topic flyouts help the user select the correct item.
+      DPLA Suggest is a jQuery plugin that adds Digital Public Library of America search autocomplete to search boxes on your site. Start typing text and the widget suggests relevant matches from the millions of records in DPLA. (In the future you will be able search subset of types.) Topic flyouts help the user select the correct item. It uses <a href="http://dp.la/info/developers/codex/">DPLA's Platform API</a> to return items.
     </p>
 
     <form method="get" action="http://dp.la/search">
@@ -95,8 +95,8 @@ Steven Anderson (sanderson@bpl.org)
         api_key: "your DPLA key"
       })
       .bind("fb-select", function(e, data) {
-         window.open(data.isShownAt, '_blank');
-         //To use same window, do window.open(data.isShownAt, '_self');
+         window.open("http://dp.la/item/" + data.id, '_blank');
+         //To use same window, do window.open("http://dp.la/item/" + data.id, '_blank');
       });
     });
 &lt;/script&gt;
